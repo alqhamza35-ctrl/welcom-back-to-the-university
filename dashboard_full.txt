@@ -1,4 +1,4 @@
-// ========================================
+﻿// ========================================
 // Back to School - Dashboard Module
 // ========================================
 
@@ -17,29 +17,6 @@
 
     function sanitizeInput(str) {
         return escapeHtml(str).trim();
-    }
-
-    // ========================================
-    // Sound System
-    // ========================================
-    function playNotificationSound() {
-        try {
-            var ctx = new (window.AudioContext || window.webkitAudioContext)();
-            var notes = [880, 1100, 1320];
-            notes.forEach(function(freq, i) {
-                var osc = ctx.createOscillator();
-                var gain = ctx.createGain();
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.frequency.value = freq;
-                osc.type = 'sine';
-                var startTime = ctx.currentTime + (i * 0.15);
-                gain.gain.setValueAtTime(0.3, startTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.3);
-                osc.start(startTime);
-                osc.stop(startTime + 0.3);
-            });
-        } catch (e) {}
     }
 
     // Session timeout (30 minutes inactivity)
@@ -120,568 +97,9 @@
     // Theme State
     let currentTheme = 'dark';
 
-    // Language State
-    let currentLang = 'ar';
-
-    // Translations
-    var translations = {
-        ar: {
-            app_name: 'العودة للمدرسة',
-            nav_dashboard: 'لوحة التحكم',
-            nav_classes: 'مواد اليوم',
-            nav_homework: 'الواجبات',
-            nav_exams: 'الامتحانات',
-            nav_schedule: 'الجدول اليومي',
-            nav_calendar: 'التقويم',
-            nav_pomodoro: 'مؤقت المذاكرة',
-            nav_achievements: 'الإنجازات',
-            nav_parent: 'لوحة الوالدين',
-            nav_tasktracking: 'تتبع المهام',
-            nav_settings: 'الإعدادات',
-            conversations: 'المحادثات',
-            no_conversations: 'لا توجد محادثات بعد',
-            daily_schedule: 'جدول اليوم',
-            no_schedule_yet: 'لم يتم إنشاء الجدول بعد',
-            logout: 'تسجيل الخروج',
-            page_dashboard: 'لوحة التحكم',
-            welcome_today: 'مرحباً بك اليوم',
-            stat_homework: 'واجب مستحق',
-            stat_exams: 'امتحان قادم',
-            stat_completed: 'مهمة مكتملة',
-            stat_pending: 'مهمة معلقة',
-            stat_classes: 'مادة اليوم',
-            ai_title: 'مساعد التخطيط الذكي',
-            ai_subtitle: 'دعني أساعدك في تنظيم يومك',
-            btn_generate_schedule: 'إنشاء الجدول',
-            ai_clear_chat: 'مسح المحادثة',
-            ai_export_chat: 'تصدير المحادثة',
-            ai_show_tips: 'نصائح الدراسة',
-            ai_show_stats: 'إحصائياتي',
-            ai_welcome: 'مرحباً! أنا مساعدك الذكي. كيف يمكنني مساعدتك اليوم?',
-            ai_help_schedule: 'إنشاء جدول يومي',
-            ai_help_hw: 'عرض الواجبات والامتحانات',
-            ai_help_tips: 'نصائح للدراسة',
-            ai_prompt: 'اكتب رسالتك هنا!',
-            ai_no_chat: 'لا توجد محادثة',
-            ai_no_chat_desc: 'ابدأ محادثة أولاً',
-            ai_exported: 'تم التصدير',
-            ai_exported_desc: 'تم تصدير المحادثة بنجاح',
-            ai_rate_limit: 'يرجى الانتظار قليلاً قبل إرسال رسالة أخرى.',
-            page_classes: 'مواد اليوم',
-            btn_add_class: 'إضافة مادة',
-            page_homework: 'إدارة الواجبات',
-            btn_add_homework: 'إضافة واجب',
-            page_exams: 'إدارة الامتحانات',
-            btn_add_exam: 'إضافة امتحان',
-            page_schedule: 'الجدول اليومي الذكي',
-            btn_regenerate: 'إعادة إنشاء الجدول',
-            page_calendar: 'التقويم',
-            page_pomodoro: 'مؤقت المذاكرة (بومودورو)',
-            page_achievements: 'الإنجازات والنقاط',
-            page_parent: 'لوحة متابعة الوالدين',
-            page_tasktracking: 'تتبع المهام الدراسية',
-            page_settings: 'الإعدادات',
-            settings_subtitle: 'تخصيص حسابك',
-            classes_subtitle: 'المواد التي درستها اليوم',
-            hw_subtitle: 'إدارة واجباتك المدرسية',
-            exams_subtitle: 'تتبع امتحاناتك القادمة',
-            schedule_subtitle: 'خطط يومك بذكاء',
-            calendar_subtitle: 'عرض أحداثك ومواعيدك',
-            pomodoro_subtitle: 'مؤقت المذاكرة',
-            pomodoro_desc: 'تقنية بومودورو للمذاكرة الفعالة',
-            achievements_subtitle: 'نقاطك وشاراتك',
-            tasktracking_subtitle: 'تتبع ساعات المذاكرة والتقدم',
-            parent_subtitle: 'متابعة التقدم الدراسي',
-            settings_account: 'معلومات الحساب',
-            settings_notifications: 'إعدادات الإشعارات',
-            settings_password: 'تغيير كلمة المرور',
-            settings_backup: 'النسخ الاحتياطي والبيانات',
-            settings_account_section: 'الحساب',
-            modal_add_homework: 'إضافة واجب جديد',
-            modal_add_class: 'إضافة مادة للمذاكرة',
-            modal_add_exam: 'إضافة امتحان جديد',
-            filter_all: 'الكل',
-            filter_today: 'اليوم',
-            filter_upcoming: 'القادم',
-            filter_completed: 'مكتمل',
-            level_beginner: 'مبتدئ',
-            xp_points: 'نقطة خبرة',
-            badge_first_hw: 'أول واجب',
-            badge_five_hw: '5 واجبات',
-            badge_ten_hw: '10 واجبات',
-            badge_first_exam: 'أول امتحان',
-            badge_pomo_5: '5 جولات بومودورو',
-            badge_pomo_20: '20 جولة بومودورو',
-            badge_streak_3: '3 أيام متتالية',
-            badge_streak_7: '7 أيام متتالية',
-            badge_level_5: 'المستوى 5',
-            badge_level_10: 'المستوى 10',
-            badges_title: 'الشارات',
-            points_log_title: 'سجل النقاط',
-            no_points: 'لم تكسب نقاطاً بعد',
-            daily_activity: 'النشاط اليومي',
-            daily_activity_hint: 'أكمل مهامك اليومية لكسب نقاط إضافية',
-            pomodoro_work: 'مذاكَرة',
-            pomodoro_short: 'استراحة قصيرة',
-            pomodoro_long: 'استراحة طويلة',
-            pomodoro_start: 'بدء',
-            pomodoro_pause: 'إيقاف مؤقت',
-            pomodoro_reset: 'إعادة',
-            pomodoro_skip: 'تخطي',
-            pomodoro_sessions: 'جولات مكتملة',
-            pomodoro_minutes: 'دقيقة مذاكرة',
-            pomodoro_streak: 'أطول سلسلة',
-            pomodoro_history: 'سجل الجولات',
-            pomodoro_no_history: 'لا توجد جولات مسجلة بعد',
-            pomodoro_stats: 'إحصائيات اليوم',
-            parent_tracking_code: 'رمز المتابعة',
-            parent_share: 'شارك هذا الرمز مع ولي الأمر لمتابعة تقدمك',
-            parent_generate: 'إنشاء رمز جديد',
-            parent_completed_hw: 'واجب مكتمل',
-            parent_pending_hw: 'واجب متبقي',
-            parent_study_hours: 'ساعة مذاكرة',
-            parent_points: 'نقطة',
-            parent_hw_progress: 'نسب إنجاز الواجبات',
-            parent_study_activity: 'نشاط المذاكَرة (آخر 7 أيام)',
-            parent_upcoming_exams: 'الامتحانات القادمة',
-            parent_no_exams: 'لا توجد امتحانات قادمة',
-            parent_daily_schedule: 'جدول اليوم',
-            parent_no_schedule: 'لم يتم إنشاء جدول بعد',
-            tracking_weekly_hours: 'ساعة مذاكَرة هذا الأسبوع',
-            tracking_completed: 'بلوك مكتمل',
-            tracking_streak: 'أيام متتالية',
-            tracking_efficiency: 'نسبة الإنجاز',
-            tracking_weekly_activity: 'نشاط هذا الأسبوع',
-            tracking_today_tasks: 'مهام اليوم',
-            tracking_add_block: 'إضافة بلوك وقت جديد',
-            tracking_time_blocks: 'بلوكات الوقت',
-            tracking_no_blocks: 'لم تضف بلوكات وقت بعد',
-            tracking_habit_analysis: 'تحليل العادات الذكي',
-            tracking_no_habits: 'أضف بيانات أكثر للحصول على تحليلات ذكية',
-            task_title: 'المهمة',
-            task_subject: 'المادة',
-            task_start: 'وقت البداية',
-            task_end: 'وقت النهاية',
-            task_priority: 'الأولوية',
-            task_type: 'النوع',
-            priority_high: 'عالية',
-            priority_medium: 'متوسطة',
-            priority_low: 'منخفضة',
-            type_study: 'مذاكرة',
-            type_review: 'مراجعة',
-            type_homework: 'واجب',
-            type_project: 'مشروع',
-            btn_add: 'إضافة',
-            save: 'حفظ',
-            cancel: 'إلغاء',
-            close: 'إغلاق',
-            notif_homework: 'إشعارات الواجبات',
-            notif_exams: 'إشعارات الامتحانات',
-            notif_schedule: 'تذكيرات الجدول',
-            notif_daily: 'تذكير النشاط اليومي',
-            export_data: 'تصدير البيانات',
-            export_desc: 'تحميل نسخة احتياطية من جميع بياناتك',
-            btn_export: 'تصدير',
-            import_data: 'استيراد البيانات',
-            import_desc: 'استعادة البيانات من نسخة احتياطية',
-            btn_import: 'استيراد',
-            btn_logout: 'تسجيل الخروج',
-            schedule_settings: 'إعدادات اليوم',
-            schedule_school_start: 'بداية الدوام',
-            schedule_school_end: 'نهاية الدوام',
-            schedule_wake: 'وقت الاستيقاظ',
-            schedule_sleep: 'وقت النوم',
-            schedule_breakfast: 'وجبة الإفطار',
-            schedule_lunch: 'وجبة الغداء',
-            schedule_dinner: 'وجبة العشاء',
-            schedule_exercise: 'وقت التمرين',
-            schedule_shower: 'وقت الاستحمام',
-            confirm_delete_hw: 'حذف هذا الواجب؟',
-            confirm_delete_exam: 'حذف هذا الامتحان؟',
-            confirm_delete_class: 'حذف المادة؟',
-            confirm_delete_block: 'حذف بلوك الوقت؟',
-            no_exams: 'لا توجد امتحانات',
-            no_exams_desc: 'أضف امتحاناتك القادمة هنا',
-            no_hw: 'لا توجد واجبات',
-            no_hw_desc: 'ابدأ بإضافة واجباتك هنا',
-            no_classes: 'لم تضف مواد اليوم بعد',
-            no_classes_desc: 'أضف المواد التي درستها اليوم لتظهر في جدول المذاكَرة',
-            today_events: 'حداث اليوم',
-            no_events: 'لا توجد أحداث لهذا اليوم',
-            exams_tomorrow: 'امتحانات غداً',
-            no_exams_tomorrow: 'لا توجد امتحانات غداً',
-            estimated_study: 'وقت المذاكَرة المقدر:',
-            minutes: 'دقيقة',
-            subjects_count: 'عدد المواد:',
-            tb_title_ph: 'مثال: مراجعة رياضيات',
-            tb_subject_ph: 'مثال: رياضيات',
-            hw_title_ph: 'مثال: تمارين رياضيات',
-            hw_subject_ph: 'مثال: رياضيات',
-            hw_desc_ph: 'أضف تفاصيل الواجب...',
-            class_name_ph: 'مثال: رياضيات، علوم، تاريخ...',
-            class_notes_ph: 'أضف ملاحظات على المادة...',
-            exam_name_ph: 'مثال: امتحان نهائي',
-            exam_subject_ph: 'مثال: علوم',
-            exam_notes_ph: 'أضف ملاحظات أو مذاكرة مقترحة...',
-            toast_theme_changed: 'تم تبديل السمة',
-            toast_dark: 'الوضع المظلم',
-            toast_light: 'الوضع الفاتح',
-            toast_daily_reminder: 'تذكير يومي: لا تنسَ متابعة جدولك!',
-            toast_reminder_title: 'تذكير',
-            toast_block_added: 'تمت إضافة بلوك الوقت بنجاح',
-            toast_export_success: 'تم تصدير جميع البيانات بنجاح',
-            toast_export_title: 'تم التصدير',
-            toast_import_error: 'ملف الاستيراد غير صالح',
-            toast_import_confirm: 'سيتم استبدال جميع بياناتك الحالية بالبيانات المستوردة. هل أنت متأكد؟',
-            toast_import_success: 'تم استيراد جميع البيانات بنجاح',
-            toast_import_title: 'تم الاستيراد',
-            toast_import_error2: 'حدث خطأ أثناء قراءة الملف',
-            toast_pw_changed: 'تم تغيير كلمة المرور بنجاح!',
-            notif_hw_due: 'واجبات مستحقة اليوم!',
-            notif_hw_due_body: 'لديك',
-            notif_hw_due_count: 'واجبات مستحقة اليوم',
-            notif_hw_tomorrow: 'واجبات مستحقة غداً!',
-            notif_hw_tomorrow_body: 'لديك',
-            notif_hw_tomorrow_count: 'واجبات مستحقة غداً',
-            notif_exam_today: 'امتحان اليوم!',
-            notif_exam_today_body: 'لديك',
-            notif_exam_today_count: 'امتحانات اليوم:',
-            notif_exam_tomorrow: 'امتحان غداً!',
-            notif_exam_tomorrow_body: 'لديك',
-            notif_exam_tomorrow_count: 'امتحانات غداً:',
-            notif_schedule: 'تذكير بالجدول',
-            notif_pomodoro: 'بومودورو',
-            notif_pomodoro_body: 'انتهت الجولة! وقت',
-            ai_resp_schedule: 'تم إنشاء جدول يومك بناءً على الوقت المحدد! يمكنك مشاهدته في قسم "الجدول اليومي".',
-            ai_resp_classes_count: 'لديك ',
-            ai_resp_classes_minutes: ' مواد اليوم (',
-            ai_resp_no_classes: 'لم تضف مواد اليوم بعد.',
-            ai_resp_hw_count: 'لديك ',
-            ai_resp_hw_list: ' واجبات غير مكتملة:',
-            ai_resp_no_hw: 'لا توجد واجبات مستحقة اليوم.',
-            ai_resp_exams: 'امتحاناتك القادمة:',
-            ai_resp_no_exams: 'لا توجد امتحانات قادمة.',
-            ai_resp_tip_streak: 'سلسلة نشاط جيدة منذ ',
-            ai_resp_tip_streak2: ' أيام! استمر.',
-            ai_resp_tip_pomo: 'حاول إكمال 3 جولات بومودورو على الأقل اليوم.',
-            ai_resp_tip_hw: 'لديك ',
-            ai_resp_tip_hw2: ' واجبات معلقة. رتبها حسب الأولوية.',
-            ai_resp_tip_start: 'بداية يومك جيدة! حاول إنشاء جدول يومي منظم.',
-            ai_resp_tips: '💡 نصائحي لك:',
-            ai_resp_tracking: 'تم الانتقال لصفحة تتبع المهام.',
-            ai_resp_stats: 'إحصائياتك',
-            ai_resp_export: 'تم الانتقال للإعدادات. يمكنك تصدير البيانات من قسم "النسخ الاحتياطي".',
-            ai_resp_default: 'أنا هنا لمساعدتك! يمكنني:<br>• إنشاء جدول يومي<br>• عرض الواجبات والامتحانات<br>• نصائح للدراسة<br>• تتبع نشاطك<br>• تصدير البيانات',
-            hw_title_label: 'عنوان الواجب',
-            hw_subject_label: 'المادة',
-            hw_desc_label: 'الوصف',
-            hw_due_label: 'تاريخ التسليم',
-            hw_day_label: 'اليوم',
-            hw_priority_label: 'الأولوية',
-            class_name_label: 'اسم المادة',
-            class_duration_label: 'مدة المذاكَرة (بالدقائق)',
-            class_priority_label: 'الأولوية',
-            class_color_label: 'اللون',
-            class_notes_label: 'ملاحظات (اختياري)',
-            exam_name_label: 'اسم الامتحان',
-            exam_subject_label: 'المادة',
-            exam_date_label: 'التاريخ',
-            exam_time_label: 'الوقت',
-            exam_day_label: 'اليوم',
-            exam_notes_label: 'ملاحظات',
-            day_sat: 'السبت',
-            day_sun: 'الأحد',
-            day_mon: 'الإثنين',
-            day_tue: 'الثلاثاء',
-            day_wed: 'الأربعاء',
-            day_thu: 'الخميس',
-            day_fri: 'الجمعة',
-            password_current: 'كلمة المرور الحالية',
-            password_new: 'كلمة المرور الجديدة',
-            password_confirm: 'تأكيد كلمة المرور الجديدة',
-            btn_save_changes: 'حفظ التغييرات',
-            points_label: 'نقطة',
-            level_xp: 'نقطة خبرة'
-        },
-        en: {
-            app_name: 'Back to School',
-            nav_dashboard: 'Dashboard',
-            nav_classes: 'Today\'s Subjects',
-            nav_homework: 'Homework',
-            nav_exams: 'Exams',
-            nav_schedule: 'Daily Schedule',
-            nav_calendar: 'Calendar',
-            nav_pomodoro: 'Study Timer',
-            nav_achievements: 'Achievements',
-            nav_parent: 'Parent Dashboard',
-            nav_tasktracking: 'Task Tracking',
-            nav_settings: 'Settings',
-            conversations: 'Conversations',
-            no_conversations: 'No conversations yet',
-            daily_schedule: 'Today\'s Schedule',
-            no_schedule_yet: 'No schedule created yet',
-            logout: 'Logout',
-            page_dashboard: 'Dashboard',
-            welcome_today: 'Welcome back today',
-            stat_homework: 'Homework Due',
-            stat_exams: 'Upcoming Exam',
-            stat_completed: 'Task Completed',
-            stat_pending: 'Pending Task',
-            stat_classes: 'Today\'s Subject',
-            ai_title: 'Smart Planning Assistant',
-            ai_subtitle: 'Let me help you organize your day',
-            btn_generate_schedule: 'Generate Schedule',
-            ai_clear_chat: 'Clear Chat',
-            ai_export_chat: 'Export Chat',
-            ai_show_tips: 'Study Tips',
-            ai_show_stats: 'My Stats',
-            ai_welcome: 'Hello! I\'m your smart assistant. How can I help you today?',
-            ai_help_schedule: 'Create a daily schedule',
-            ai_help_hw: 'View homework and exams',
-            ai_help_tips: 'Study tips',
-            ai_prompt: 'Type your message here!',
-            ai_no_chat: 'No conversation',
-            ai_no_chat_desc: 'Start a conversation first',
-            ai_exported: 'Exported',
-            ai_exported_desc: 'Chat exported successfully',
-            ai_rate_limit: 'Please wait a moment before sending another message.',
-            page_classes: 'Today\'s Subjects',
-            btn_add_class: 'Add Subject',
-            page_homework: 'Homework Management',
-            btn_add_homework: 'Add Homework',
-            page_exams: 'Exam Management',
-            btn_add_exam: 'Add Exam',
-            page_schedule: 'Smart Daily Schedule',
-            btn_regenerate: 'Regenerate Schedule',
-            page_calendar: 'Calendar',
-            page_pomodoro: 'Study Timer (Pomodoro)',
-            page_achievements: 'Achievements & Points',
-            page_parent: 'Parent Dashboard',
-            page_tasktracking: 'Task Tracking',
-            page_settings: 'Settings',
-            settings_subtitle: 'Customize your account',
-            classes_subtitle: 'Subjects you studied today',
-            hw_subtitle: 'Manage your homework',
-            exams_subtitle: 'Track your upcoming exams',
-            schedule_subtitle: 'Plan your day smartly',
-            calendar_subtitle: 'View events and dates',
-            pomodoro_subtitle: 'Study Timer',
-            pomodoro_desc: 'Pomodoro technique for effective studying',
-            achievements_subtitle: 'Your points and badges',
-            tasktracking_subtitle: 'Track study hours and progress',
-            parent_subtitle: 'Track academic progress',
-            settings_account: 'Account Information',
-            settings_notifications: 'Notification Settings',
-            settings_password: 'Change Password',
-            settings_backup: 'Backup & Data',
-            settings_account_section: 'Account',
-            modal_add_homework: 'Add New Homework',
-            modal_add_class: 'Add Study Subject',
-            modal_add_exam: 'Add New Exam',
-            filter_all: 'All',
-            filter_today: 'Today',
-            filter_upcoming: 'Upcoming',
-            filter_completed: 'Completed',
-            level_beginner: 'Beginner',
-            xp_points: 'XP',
-            badge_first_hw: 'First Homework',
-            badge_five_hw: '5 Homeworks',
-            badge_ten_hw: '10 Homeworks',
-            badge_first_exam: 'First Exam',
-            badge_pomo_5: '5 Pomodoro Rounds',
-            badge_pomo_20: '20 Pomodoro Rounds',
-            badge_streak_3: '3 Day Streak',
-            badge_streak_7: '7 Day Streak',
-            badge_level_5: 'Level 5',
-            badge_level_10: 'Level 10',
-            badges_title: 'Badges',
-            points_log_title: 'Points Log',
-            no_points: 'No points earned yet',
-            daily_activity: 'Daily Activity',
-            daily_activity_hint: 'Complete your daily tasks to earn extra points',
-            pomodoro_work: 'Study',
-            pomodoro_short: 'Short Break',
-            pomodoro_long: 'Long Break',
-            pomodoro_start: 'Start',
-            pomodoro_pause: 'Pause',
-            pomodoro_reset: 'Reset',
-            pomodoro_skip: 'Skip',
-            pomodoro_sessions: 'Sessions Completed',
-            pomodoro_minutes: 'Minutes Studied',
-            pomodoro_streak: 'Longest Streak',
-            pomodoro_history: 'Session History',
-            pomodoro_no_history: 'No sessions recorded yet',
-            pomodoro_stats: 'Today\'s Stats',
-            parent_tracking_code: 'Tracking Code',
-            parent_share: 'Share this code with your parent to track your progress',
-            parent_generate: 'Generate New Code',
-            parent_completed_hw: 'Homework Completed',
-            parent_pending_hw: 'Pending Homework',
-            parent_study_hours: 'Study Hours',
-            parent_points: 'Points',
-            parent_hw_progress: 'Homework Completion Rate',
-            parent_study_activity: 'Study Activity (Last 7 Days)',
-            parent_upcoming_exams: 'Upcoming Exams',
-            parent_no_exams: 'No upcoming exams',
-            parent_daily_schedule: 'Today\'s Schedule',
-            parent_no_schedule: 'No schedule created yet',
-            tracking_weekly_hours: 'Study Hours This Week',
-            tracking_completed: 'Blocks Completed',
-            tracking_streak: 'Day Streak',
-            tracking_efficiency: 'Completion Rate',
-            tracking_weekly_activity: 'This Week\'s Activity',
-            tracking_today_tasks: 'Today\'s Tasks',
-            tracking_add_block: 'Add New Time Block',
-            tracking_time_blocks: 'Time Blocks',
-            tracking_no_blocks: 'No time blocks added yet',
-            tracking_habit_analysis: 'Smart Habit Analysis',
-            tracking_no_habits: 'Add more data for smart insights',
-            task_title: 'Task',
-            task_subject: 'Subject',
-            task_start: 'Start Time',
-            task_end: 'End Time',
-            task_priority: 'Priority',
-            task_type: 'Type',
-            priority_high: 'High',
-            priority_medium: 'Medium',
-            priority_low: 'Low',
-            type_study: 'Study',
-            type_review: 'Review',
-            type_homework: 'Homework',
-            type_project: 'Project',
-            btn_add: 'Add',
-            save: 'Save',
-            cancel: 'Cancel',
-            close: 'Close',
-            notif_homework: 'Homework Notifications',
-            notif_exams: 'Exam Notifications',
-            notif_schedule: 'Schedule Reminders',
-            notif_daily: 'Daily Activity Reminder',
-            export_data: 'Export Data',
-            export_desc: 'Download a backup of all your data',
-            btn_export: 'Export',
-            import_data: 'Import Data',
-            import_desc: 'Restore data from a backup',
-            btn_import: 'Import',
-            btn_logout: 'Logout',
-            schedule_settings: 'Day Settings',
-            schedule_school_start: 'School Start',
-            schedule_school_end: 'School End',
-            schedule_wake: 'Wake Up Time',
-            schedule_sleep: 'Sleep Time',
-            schedule_breakfast: 'Breakfast',
-            schedule_lunch: 'Lunch',
-            schedule_dinner: 'Dinner',
-            schedule_exercise: 'Exercise Time',
-            schedule_shower: 'Shower Time',
-            confirm_delete_hw: 'Delete this homework?',
-            confirm_delete_exam: 'Delete this exam?',
-            confirm_delete_class: 'Delete this subject?',
-            confirm_delete_block: 'Delete this time block?',
-            no_exams: 'No Exams',
-            no_exams_desc: 'Add your upcoming exams here',
-            no_hw: 'No Homework',
-            no_hw_desc: 'Start by adding your homework here',
-            no_classes: 'No subjects added today',
-            no_classes_desc: 'Add the subjects you studied today for the study schedule',
-            today_events: 'Today\'s Events',
-            no_events: 'No events for this day',
-            exams_tomorrow: 'Exams Tomorrow',
-            no_exams_tomorrow: 'No exams tomorrow',
-            estimated_study: 'Estimated study time:',
-            minutes: 'minutes',
-            subjects_count: 'Subjects count:',
-            tb_title_ph: 'e.g. Math review',
-            tb_subject_ph: 'e.g. Math',
-            hw_title_ph: 'e.g. Math exercises',
-            hw_subject_ph: 'e.g. Math',
-            hw_desc_ph: 'Add homework details...',
-            class_name_ph: 'e.g. Math, Science, History...',
-            class_notes_ph: 'Add notes about the subject...',
-            exam_name_ph: 'e.g. Final exam',
-            exam_subject_ph: 'e.g. Science',
-            exam_notes_ph: 'Add notes or suggested study...',
-            toast_theme_changed: 'Theme Changed',
-            toast_dark: 'Dark Mode',
-            toast_light: 'Light Mode',
-            toast_daily_reminder: 'Daily reminder: Don\'t forget to check your schedule!',
-            toast_reminder_title: 'Reminder',
-            toast_block_added: 'Time block added successfully',
-            toast_export_success: 'All data exported successfully',
-            toast_export_title: 'Exported',
-            toast_import_error: 'Invalid import file',
-            toast_import_confirm: 'All your current data will be replaced with imported data. Are you sure?',
-            toast_import_success: 'All data imported successfully',
-            toast_import_title: 'Imported',
-            toast_import_error2: 'Error reading file',
-            toast_pw_changed: 'Password changed successfully!',
-            notif_hw_due: 'Homework Due Today!',
-            notif_hw_due_body: 'You have',
-            notif_hw_due_count: 'homework due today',
-            notif_hw_tomorrow: 'Homework Due Tomorrow!',
-            notif_hw_tomorrow_body: 'You have',
-            notif_hw_tomorrow_count: 'homework due tomorrow',
-            notif_exam_today: 'Exam Today!',
-            notif_exam_today_body: 'You have',
-            notif_exam_today_count: 'exams today:',
-            notif_exam_tomorrow: 'Exam Tomorrow!',
-            notif_exam_tomorrow_body: 'You have',
-            notif_exam_tomorrow_count: 'exams tomorrow:',
-            notif_schedule: 'Schedule Reminder',
-            notif_pomodoro: 'Pomodoro',
-            notif_pomodoro_body: 'Round finished! Time for',
-            ai_resp_schedule: 'Your daily schedule has been created! You can view it in the "Daily Schedule" section.',
-            ai_resp_classes_count: 'You have ',
-            ai_resp_classes_minutes: ' subjects today (',
-            ai_resp_no_classes: 'No subjects added today yet.',
-            ai_resp_hw_count: 'You have ',
-            ai_resp_hw_list: ' incomplete homework:',
-            ai_resp_no_hw: 'No homework due today.',
-            ai_resp_exams: 'Your upcoming exams:',
-            ai_resp_no_exams: 'No upcoming exams.',
-            ai_resp_tip_streak: 'Good activity streak for ',
-            ai_resp_tip_streak2: ' days! Keep going.',
-            ai_resp_tip_pomo: 'Try to complete at least 3 pomodoro rounds today.',
-            ai_resp_tip_hw: 'You have ',
-            ai_resp_tip_hw2: ' pending homework. Sort by priority.',
-            ai_resp_tip_start: 'Good start to your day! Try creating a structured daily schedule.',
-            ai_resp_tips: '💡 My tips for you:',
-            ai_resp_tracking: 'Navigated to task tracking page.',
-            ai_resp_stats: 'Your stats',
-            ai_resp_export: 'Navigated to settings. You can export data from the "Backup" section.',
-            ai_resp_default: 'I\'m here to help! I can:<br>• Create a daily schedule<br>• Show homework & exams<br>• Study tips<br>• Track your activity<br>• Export data',
-            hw_title_label: 'Homework Title',
-            hw_subject_label: 'Subject',
-            hw_desc_label: 'Description',
-            hw_due_label: 'Due Date',
-            hw_day_label: 'Day',
-            hw_priority_label: 'Priority',
-            class_name_label: 'Subject Name',
-            class_duration_label: 'Study Duration (minutes)',
-            class_priority_label: 'Priority',
-            class_color_label: 'Color',
-            class_notes_label: 'Notes (optional)',
-            exam_name_label: 'Exam Name',
-            exam_subject_label: 'Subject',
-            exam_date_label: 'Date',
-            exam_time_label: 'Time',
-            exam_day_label: 'Day',
-            exam_notes_label: 'Notes',
-            day_sat: 'Saturday',
-            day_sun: 'Sunday',
-            day_mon: 'Monday',
-            day_tue: 'Tuesday',
-            day_wed: 'Wednesday',
-            day_thu: 'Thursday',
-            day_fri: 'Friday',
-            password_current: 'Current Password',
-            password_new: 'New Password',
-            password_confirm: 'Confirm New Password',
-            btn_save_changes: 'Save Changes',
-            points_label: 'Points',
-            level_xp: 'XP'
-        }
-    };
+    // Voice Control State
+    let recognition = null;
+    let isListening = false;
 
     // Helper functions
     function generateId() {
@@ -705,7 +123,7 @@
     function formatTime12(timeStr) {
         if (!timeStr) return '';
         const [hours, minutes] = timeStr.split(':').map(Number);
-        const period = hours >= 12 ? 'م' : 'ص';
+        const period = hours >= 12 ? 'Ù…' : 'Øµ';
         const h12 = hours % 12 || 12;
         return `${h12}:${String(minutes).padStart(2, '0')} ${period}`;
     }
@@ -713,12 +131,11 @@
     function formatDate(dateStr) {
         if (!dateStr) return '';
         const date = new Date(dateStr);
-        return date.toLocaleDateString(currentLang === 'ar' ? 'ar-EG' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        return date.toLocaleDateString('ar-EG', { year: 'numeric', month: 'short', day: 'numeric' });
     }
 
     function getPriorityLabel(priority) {
-        var t = translations[currentLang];
-        var labels = { low: t.priority_low, medium: t.priority_medium, high: t.priority_high };
+        const labels = { low: 'Ù…Ù†Ø®ÙØ¶Ø©', medium: 'Ù…ØªÙˆØ³Ø·Ø©', high: 'Ø¹Ø§Ù„ÙŠØ©' };
         return labels[priority] || priority;
     }
 
@@ -735,7 +152,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         checkAuth();
         initUI();
-        initLanguage();
         loadData();
         initEventListeners();
         updateStats();
@@ -747,7 +163,7 @@
     function checkAuth() {
         const userData = localStorage.getItem('currentUser');
         if (!userData) {
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
             return;
         }
         currentUser = JSON.parse(userData);
@@ -759,11 +175,11 @@
 
     // Update User Info
     function updateUserInfo() {
-        const initial = currentUser.displayName ? currentUser.displayName.charAt(0) : 'م';
+        const initial = currentUser.displayName ? currentUser.displayName.charAt(0) : 'Ù…';
         var el;
         if (el = document.getElementById('userAvatar')) el.textContent = initial;
         if (el = document.getElementById('userAvatarSm')) el.textContent = initial;
-        if (el = document.getElementById('userName')) el.textContent = currentUser.displayName || 'المستخدم';
+        if (el = document.getElementById('userName')) el.textContent = currentUser.displayName || 'Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…';
         if (el = document.getElementById('userEmail')) el.textContent = currentUser.email;
         if (el = document.getElementById('settingsName')) el.textContent = currentUser.displayName;
         if (el = document.getElementById('settingsEmail')) el.textContent = currentUser.email;
@@ -822,6 +238,7 @@
         updateTrackingStats();
         generateHabitInsights();
         initTheme();
+        initVoiceControl();
         initNotificationSettings();
         scheduleNotifications();
     }
@@ -858,43 +275,7 @@
         if (el) el.addEventListener(event, handler);
     }
 
-    // Language System
-    function switchLanguage(lang) {
-        currentLang = lang;
-        document.documentElement.lang = lang;
-        document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-        if (currentUser) localStorage.setItem('bts_lang_' + currentUser.id, lang);
-        var t = translations[lang];
-        var langLabel = document.getElementById('langLabel');
-        if (langLabel) langLabel.textContent = lang === 'ar' ? 'EN' : 'عربي';
-        document.querySelectorAll('[data-i18n]').forEach(function(el) {
-            var key = el.getAttribute('data-i18n');
-            if (t[key]) el.textContent = t[key];
-        });
-        document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
-            var key = el.getAttribute('data-i18n-placeholder');
-            if (t[key]) el.placeholder = t[key];
-        });
-        document.querySelectorAll('[data-i18n-title]').forEach(function(el) {
-            var key = el.getAttribute('data-i18n-title');
-            if (t[key]) el.title = t[key];
-        });
-        document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
-            var key = el.getAttribute('data-i18n-placeholder');
-            if (t[key]) el.placeholder = t[key];
-        });
-    }
-
-    function initLanguage() {
-        if (currentUser) currentLang = localStorage.getItem('bts_lang_' + currentUser.id) || 'ar';
-        switchLanguage(currentLang);
-    }
-
     function initEventListeners() {
-        safeOn('langToggle', 'click', function() {
-            switchLanguage(currentLang === 'ar' ? 'en' : 'ar');
-        });
-
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -919,51 +300,6 @@
 
         safeOn('generateScheduleBtn', 'click', generateDailySchedule);
         safeOn('generateScheduleBtn2', 'click', generateDailySchedule);
-
-        safeOn('aiMenuBtn', 'click', function(e) {
-            e.stopPropagation();
-            document.getElementById('aiDropdownMenu').classList.toggle('active');
-        });
-
-        safeOn('aiClearChat', 'click', function() {
-            document.getElementById('aiDropdownMenu').classList.remove('active');
-            clearChat();
-        });
-
-        safeOn('aiExportChat', 'click', function() {
-            document.getElementById('aiDropdownMenu').classList.remove('active');
-            exportChat();
-        });
-
-        safeOn('aiShowTips', 'click', function() {
-            document.getElementById('aiDropdownMenu').classList.remove('active');
-            var tips = '💡 نصائح المذاكرة:<br>• خصص 25 دقيقة للمذاكرة + 5 دقائق استراحة<br>• ركز على المادة الصعبة أولاً<br>• حافظ على نوم كافٍ (7-8 ساعات)<br>• تناول إفطار صحي<br>• ابعد الهاتف أثناء المذاكرة';
-            addChatMessage(tips, 'assistant');
-        });
-
-        safeOn('aiShowStats', 'click', function() {
-            document.getElementById('aiDropdownMenu').classList.remove('active');
-            var stats = '📊 إحصائياتك:<br>• المستوى: ' + gamification.level + '<br>• النقاط: ' + gamification.points + '<br>• السلسلة: ' + gamification.streak + ' أيام<br>• الواجبات المكتملة: ' + gamification.totalCompletedHW + '<br>• جولات بومودورو: ' + gamification.totalPomodoroSessions;
-            addChatMessage(stats, 'assistant');
-        });
-
-        document.addEventListener('click', function() {
-            var menu = document.getElementById('aiDropdownMenu');
-            if (menu) menu.classList.remove('active');
-        });
-
-        // Firebase Cloud Messaging foreground handler
-        if (typeof FCM !== 'undefined' && messaging) {
-            FCM.onMessage(function(payload) {
-                var title = payload.notification?.title || 'إشعار';
-                var body = payload.notification?.body || '';
-                showToast(title, body, 'info');
-                if ('Notification' in window && Notification.permission === 'granted') {
-                    new Notification(title, { body: body });
-                }
-            });
-            FCM.requestPermission();
-        }
 
         ['wakeUpTime', 'sleepTime', 'schoolStart', 'schoolEnd', 'breakfastTime', 'lunchTime', 'dinnerTime', 'exerciseTime', 'showerTime'].forEach(id => {
             safeOn(id, 'change', saveSettings);
@@ -1058,25 +394,24 @@
         if (pageEl) pageEl.classList.add('active');
         
         const titles = {
-            dashboard: { title: 'page_dashboard', subtitle: 'welcome_today' },
-            classes: { title: 'page_classes', subtitle: 'classes_subtitle' },
-            homework: { title: 'page_homework', subtitle: 'hw_subtitle' },
-            exams: { title: 'page_exams', subtitle: 'exams_subtitle' },
-            schedule: { title: 'page_schedule', subtitle: 'schedule_subtitle' },
-            calendar: { title: 'page_calendar', subtitle: 'calendar_subtitle' },
-            pomodoro: { title: 'pomodoro_subtitle', subtitle: 'pomodoro_desc' },
-            achievements: { title: 'page_achievements', subtitle: 'achievements_subtitle' },
-            tasktracking: { title: 'page_tasktracking', subtitle: 'tasktracking_subtitle' },
-            parent: { title: 'page_parent', subtitle: 'parent_subtitle' },
-            settings: { title: 'page_settings', subtitle: 'settings_subtitle' }
+            dashboard: { title: 'Ù„ÙˆØ­Ø© Ø§Ù„ØªØ­ÙƒÙ…', subtitle: 'Ù…Ø±Ø­Ø¨Ø§Ù‹ Ø¨Ùƒ Ø§Ù„ÙŠÙˆÙ…' },
+            classes: { title: 'Ù…ÙˆØ§Ø¯ Ø§Ù„ÙŠÙˆÙ…', subtitle: 'Ø§Ù„Ù…ÙˆØ§Ø¯ Ø§Ù„ØªÙŠ Ø¯Ø±Ø³ØªÙ‡Ø§ Ø§Ù„ÙŠÙˆÙ…' },
+            homework: { title: 'Ø§Ù„ÙˆØ§Ø¬Ø¨Ø§Øª', subtitle: 'Ø¥Ø¯Ø§Ø±Ø© ÙˆØ§Ø¬Ø¨Ø§ØªÙƒ Ø§Ù„Ù…Ø¯Ø±Ø³ÙŠØ©' },
+            exams: { title: 'Ø§Ù„Ø§Ù…ØªØ­Ø§Ù†Ø§Øª', subtitle: 'ØªØªØ¨Ø¹ Ø§Ù…ØªØ­Ø§Ù†Ø§ØªÙƒ Ø§Ù„Ù‚Ø§Ø¯Ù…Ø©' },
+            schedule: { title: 'Ø§Ù„Ø¬Ø¯ÙˆÙ„ Ø§Ù„ÙŠÙˆÙ…ÙŠ', subtitle: 'Ø®Ø·Ø· ÙŠÙˆÙ…Ùƒ Ø¨Ø°ÙƒØ§Ø¡' },
+            calendar: { title: 'Ø§Ù„ØªÙ‚ÙˆÙŠÙ…', subtitle: 'Ø¹Ø±Ø¶ Ø£Ø­Ø¯Ø§Ø«Ùƒ ÙˆÙ…ÙˆØ§Ø¹ÙŠØ¯Ùƒ' },
+            pomodoro: { title: 'Ù…Ø¤Ù‚Øª Ø§Ù„Ù…Ø°Ø§ÙƒØ±Ø©', subtitle: 'ØªÙ‚Ù†ÙŠØ© Ø¨ÙˆÙ…ÙˆØ¯ÙˆØ±Ùˆ Ù„Ù„Ù…Ø°Ø§ÙƒØ±Ø© Ø§Ù„ÙØ¹Ø§Ù„Ø©' },
+            achievements: { title: 'Ø§Ù„Ø¥Ù†Ø¬Ø§Ø²Ø§Øª', subtitle: 'Ù†Ù‚Ø§Ø·Ùƒ ÙˆØ´Ø§Ø±Ø§ØªÙƒ' },
+            tasktracking: { title: 'ØªØªØ¨Ø¹ Ø§Ù„Ù…Ù‡Ø§Ù… Ø§Ù„Ø¯Ø±Ø§Ø³ÙŠØ©', subtitle: 'ØªØªØ¨Ø¹ Ø³Ø§Ø¹Ø§Øª Ø§Ù„Ù…Ø°Ø§ÙƒØ±Ø© ÙˆØ§Ù„ØªÙ‚Ø¯Ù…' },
+            parent: { title: 'Ù„ÙˆØ­Ø© Ø§Ù„ÙˆØ§Ù„Ø¯ÙŠÙ†', subtitle: 'Ù…ØªØ§Ø¨Ø¹Ø© Ø§Ù„ØªÙ‚Ø¯Ù… Ø§Ù„Ø¯Ø±Ø§Ø³ÙŠ' },
+            settings: { title: 'Ø§Ù„Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª', subtitle: 'ØªØ®ØµÙŠØµ Ø­Ø³Ø§Ø¨Ùƒ' },
+            tasktracking: { title: 'ØªØªØ¨Ø¹ Ø§Ù„Ù…Ù‡Ø§Ù…', subtitle: 'Ø­Ø¯Ø¯ Ø£ÙˆÙ‚Ø§Øª Ù…Ø®ØµØµØ© Ù„Ù„Ù…Ø°Ø§ÙƒØ±Ø© ÙˆØ§Ù„Ù…Ø±Ø§Ø¬Ø¹Ø©' }
         };
-        var t = translations[currentLang];
+        
         const titleData = titles[page];
         if (titleData) {
             var pageTitle = document.getElementById('pageTitle');
-            var titleText = t[titleData.title] || titleData.title;
-            var subtitleText = t[titleData.subtitle] || titleData.subtitle;
-            if (pageTitle) pageTitle.innerHTML = '<h1>' + titleText + '</h1><p>' + subtitleText + '</p>';
+            if (pageTitle) pageTitle.innerHTML = `<h1>${titleData.title}</h1><p>${titleData.subtitle}</p>`;
         }
         
         var sidebar = document.getElementById('sidebar');
@@ -1106,7 +441,7 @@
     function createNewConversation() {
         const conversation = {
             id: generateId(),
-            title: 'محادثة جديدة',
+            title: 'Ù…Ø­Ø§Ø¯Ø«Ø© Ø¬Ø¯ÙŠØ¯Ø©',
             messages: [],
             createdAt: new Date().toISOString()
         };
@@ -1123,7 +458,7 @@
         const list = document.getElementById('conversationsList');
         if (!list) return;
         if (conversations.length === 0) {
-            list.innerHTML = '<div class="conversation-empty">' + translations[currentLang].no_conversations + '</div>';
+            list.innerHTML = '<div class="conversation-empty">Ù„Ø§ ØªÙˆØ¬Ø¯ Ù…Ø­Ø§Ø¯Ø«Ø§Øª Ø¨Ø¹Ø¯</div>';
             return;
         }
         list.innerHTML = conversations.map(conv => `
@@ -1161,42 +496,20 @@
     function clearChat() {
         const chatMessages = document.getElementById('chatMessages');
         if (!chatMessages) return;
-        const t = translations[currentLang];
         chatMessages.innerHTML = `
             <div class="message assistant">
                 <div class="message-avatar"><i class="fas fa-robot"></i></div>
                 <div class="message-content">
-                    <p>${t.ai_welcome || 'مرحباً! أنا مساعدك الذكي. كيف يمكنني مساعدتك اليوم?'}</p>
+                    <p>Ù…Ø±Ø­Ø¨Ø§Ù‹! Ø£Ù†Ø§ Ù…Ø³Ø§Ø¹Ø¯Ùƒ Ø§Ù„Ø°ÙƒÙŠ Ù„Ù„ØªØ®Ø·ÙŠØ· Ø§Ù„ÙŠÙˆÙ…ÙŠ. ÙŠÙ…ÙƒÙ†Ù†ÙŠ Ù…Ø³Ø§Ø¹Ø¯ØªÙƒ ÙÙŠ:</p>
                     <ul>
-                        <li>${t.ai_help_schedule || 'إنشاء جدول يومي'}</li>
-                        <li>${t.ai_help_hw || 'عرض الواجبات والامتحانات'}</li>
-                        <li>${t.ai_help_tips || 'نصائح للدراسة'}</li>
+                        <li>ØªÙ†Ø¸ÙŠÙ… Ø¬Ø¯ÙˆÙ„ ÙŠÙˆÙ…Ùƒ</li>
+                        <li>Ø¬Ø¯ÙˆÙ„Ø© Ø§Ù„ÙˆØ§Ø¬Ø¨Ø§Øª ÙˆØ§Ù„Ø§Ù…ØªØ­Ø§Ù†Ø§Øª</li>
+                        <li>ØªØ®ØµÙŠØµ Ø£ÙˆÙ‚Ø§Øª Ù„Ù„ØªÙ…Ø§Ø±ÙŠÙ† ÙˆØ§Ù„Ø±Ø§Ø­Ø©</li>
                     </ul>
-                    <p>${t.ai_prompt || 'اكتب رسالتك هنا!'}</p>
+                    <p>Ø§ÙƒØªØ¨ "Ø¥Ù†Ø´Ø§Ø¡ Ø§Ù„Ø¬Ø¯ÙˆÙ„" Ù„Ø¥Ù†Ø´Ø§Ø¡ Ø¬Ø¯ÙˆÙ„ ÙŠÙˆÙ…Ùƒ!</p>
                 </div>
             </div>
         `;
-    }
-
-    function exportChat() {
-        if (!currentConversation || currentConversation.messages.length === 0) {
-            showToast(translations[currentLang].ai_no_chat || 'لا توجد محادثة', translations[currentLang].ai_no_chat_desc || 'ابدأ محادثة أولاً', 'warning');
-            return;
-        }
-        var text = currentConversation.messages.map(function(m) {
-            var role = m.role === 'user' ? (currentLang === 'ar' ? 'أنت' : 'You') : (currentLang === 'ar' ? 'المساعد' : 'Assistant');
-            return role + ': ' + m.content.replace(/<[^>]*>/g, '');
-        }).join('\n\n');
-        var blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = 'chat-export-' + new Date().toISOString().split('T')[0] + '.txt';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        showToast(translations[currentLang].ai_exported || 'تم التصدير', translations[currentLang].ai_exported_desc || 'تم تصدير المحادثة بنجاح', 'success');
     }
 
     // AI Chat
@@ -1207,7 +520,7 @@
 
         const now = Date.now();
         if (now - lastAiCall < AI_RATE_LIMIT) {
-            addChatMessage(translations[currentLang].ai_rate_limit || 'يرجى الانتظار قليلاً قبل إرسال رسالة أخرى.', 'assistant');
+            addChatMessage('ÙŠØ±Ø¬Ù‰ Ø§Ù„Ø§Ù†ØªØ¸Ø§Ø± Ù‚Ù„ÙŠÙ„Ø§Ù‹ Ù‚Ø¨Ù„ Ø¥Ø±Ø³Ø§Ù„ Ø±Ø³Ø§Ù„Ø© Ø£Ø®Ø±Ù‰.', 'assistant');
             return;
         }
         lastAiCall = now;
@@ -1261,15 +574,15 @@
         const exercise = document.getElementById('exerciseTime').value;
         
         dailySchedule = [];
-        dailySchedule.push({ time: wakeUp, activity: 'الاستيقاظ', icon: 'sun', type: 'other', desc: 'بداية يوم جديد' });
-        dailySchedule.push({ time: breakfast, activity: 'وجبة الإفطار', icon: 'utensils', type: 'meal', desc: 'وجبة صحية' });
+        dailySchedule.push({ time: wakeUp, activity: 'Ø§Ù„Ø§Ø³ØªÙŠÙ‚Ø§Ø¸', icon: 'sun', type: 'other', desc: 'Ø¨Ø¯Ø§ÙŠØ© ÙŠÙˆÙ… Ø¬Ø¯ÙŠØ¯' });
+        dailySchedule.push({ time: breakfast, activity: 'ÙˆØ¬Ø¨Ø© Ø§Ù„Ø¥ÙØ·Ø§Ø±', icon: 'utensils', type: 'meal', desc: 'ÙˆØ¬Ø¨Ø© ØµØ­ÙŠØ©' });
         
         const schoolStartMin = timeToMinutes(schoolStart);
-        dailySchedule.push({ time: minutesToTime(schoolStartMin - 30), activity: 'الذهاب للمدرسة', icon: 'bus', type: 'other', desc: 'السفر للمدرسة' });
-        dailySchedule.push({ time: schoolStart, activity: 'بداية الدوام المدرسي', icon: 'school', type: 'school', desc: 'دراسة' });
+        dailySchedule.push({ time: minutesToTime(schoolStartMin - 30), activity: 'Ø§Ù„Ø°Ù‡Ø§Ø¨ Ù„Ù„Ù…Ø¯Ø±Ø³Ø©', icon: 'bus', type: 'other', desc: 'Ø§Ù„Ø³ÙØ± Ù„Ù„Ù…Ø¯Ø±Ø³Ø©' });
+        dailySchedule.push({ time: schoolStart, activity: 'Ø¨Ø¯Ø§ÙŠØ© Ø§Ù„Ø¯ÙˆØ§Ù… Ø§Ù„Ù…Ø¯Ø±Ø³ÙŠ', icon: 'school', type: 'school', desc: 'Ø¯Ø±Ø§Ø³Ø©' });
         
-        dailySchedule.push({ time: schoolEnd, activity: 'نهاية الدوام والعودة', icon: 'home', type: 'school', desc: 'العودة للمنزل' });
-        dailySchedule.push({ time: lunch, activity: 'وجبة الغداء', icon: 'utensils', type: 'meal', desc: 'استراحة وغداء' });
+        dailySchedule.push({ time: schoolEnd, activity: 'Ù†Ù‡Ø§ÙŠØ© Ø§Ù„Ø¯ÙˆØ§Ù… ÙˆØ§Ù„Ø¹ÙˆØ¯Ø©', icon: 'home', type: 'school', desc: 'Ø§Ù„Ø¹ÙˆØ¯Ø© Ù„Ù„Ù…Ù†Ø²Ù„' });
+        dailySchedule.push({ time: lunch, activity: 'ÙˆØ¬Ø¨Ø© Ø§Ù„ØºØ¯Ø§Ø¡', icon: 'utensils', type: 'meal', desc: 'Ø§Ø³ØªØ±Ø§Ø­Ø© ÙˆØºØ¯Ø§Ø¡' });
         
         const todayDate = new Date().toISOString().split('T')[0];
         const todaySubjects = classes.filter(c => c.date === todayDate);
@@ -1279,21 +592,21 @@
             todaySubjects.forEach(subj => {
                 dailySchedule.push({ 
                     time: minutesToTime(currentStudyTime), 
-                    activity: `مذاكرة: ${subj.name}`, 
+                    activity: `Ù…Ø°Ø§ÙƒØ±Ø©: ${subj.name}`, 
                     icon: 'book-open', 
                     type: 'study', 
-                    desc: `${subj.duration} دقيقة`,
+                    desc: `${subj.duration} Ø¯Ù‚ÙŠÙ‚Ø©`,
                     classColor: subj.color 
                 });
                 currentStudyTime += subj.duration;
             });
         } else {
-            dailySchedule.push({ time: minutesToTime(currentStudyTime), activity: 'وقت المذاكرة والواجبات', icon: 'book', type: 'study', desc: 'مراجعة عامة' });
+            dailySchedule.push({ time: minutesToTime(currentStudyTime), activity: 'ÙˆÙ‚Øª Ø§Ù„Ù…Ø°Ø§ÙƒØ±Ø© ÙˆØ§Ù„ÙˆØ§Ø¬Ø¨Ø§Øª', icon: 'book', type: 'study', desc: 'Ù…Ø±Ø§Ø¬Ø¹Ø© Ø¹Ø§Ù…Ø©' });
         }
         
-        dailySchedule.push({ time: exercise, activity: 'التمارين الرياضية', icon: 'dumbbell', type: 'exercise', desc: 'نشاط بدني' });
-        dailySchedule.push({ time: dinner, activity: 'وجبة العشاء', icon: 'utensils', type: 'meal', desc: 'عشاء' });
-        dailySchedule.push({ time: sleep, activity: 'النوم', icon: 'moon', type: 'sleep', desc: 'نوم هادئ' });
+        dailySchedule.push({ time: exercise, activity: 'Ø§Ù„ØªÙ…Ø§Ø±ÙŠÙ† Ø§Ù„Ø±ÙŠØ§Ø¶ÙŠØ©', icon: 'dumbbell', type: 'exercise', desc: 'Ù†Ø´Ø§Ø· Ø¨Ø¯Ù†ÙŠ' });
+        dailySchedule.push({ time: dinner, activity: 'ÙˆØ¬Ø¨Ø© Ø§Ù„Ø¹Ø´Ø§Ø¡', icon: 'utensils', type: 'meal', desc: 'Ø¹Ø´Ø§Ø¡' });
+        dailySchedule.push({ time: sleep, activity: 'Ø§Ù„Ù†ÙˆÙ…', icon: 'moon', type: 'sleep', desc: 'Ù†ÙˆÙ… Ù‡Ø§Ø¯Ø¦' });
         
         dailySchedule.sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time));
         addPoints('schedule_generated');
@@ -1309,9 +622,8 @@
         if (!timeline || !preview) return;
         
         if (dailySchedule.length === 0) {
-            var t = translations[currentLang];
-            timeline.innerHTML = '<div class="empty-state"><i class="fas fa-calendar-day"></i><h3>' + t.no_schedule_yet + '</h3></div>';
-            preview.innerHTML = '<div class="schedule-empty">' + t.no_schedule_yet + '</div>';
+            timeline.innerHTML = '<div class="empty-state"><i class="fas fa-calendar-day"></i><h3>Ù„Ù… ÙŠØªÙ… Ø¥Ù†Ø´Ø§Ø¡ Ø§Ù„Ø¬Ø¯ÙˆÙ„ Ø¨Ø¹Ø¯</h3></div>';
+            preview.innerHTML = '<div class="schedule-empty">Ù„Ù… ÙŠØªÙ… Ø¥Ù†Ø´Ø§Ø¡ Ø§Ù„Ø¬Ø¯ÙˆÙ„ Ø¨Ø¹Ø¯</div>';
             return;
         }
         
@@ -1374,7 +686,7 @@
         }
 
         if (filtered.length === 0) {
-            list.innerHTML = '<div class="empty-state"><i class="fas fa-book-open"></i><h3>' + translations[currentLang].no_hw + '</h3></div>';
+            list.innerHTML = '<div class="empty-state"><i class="fas fa-book-open"></i><h3>Ù„Ø§ ØªÙˆØ¬Ø¯ ÙˆØ§Ø¬Ø¨Ø§Øª</h3></div>';
             return;
         }
 
@@ -1416,7 +728,7 @@
     };
 
     window.deleteHomework = function(id) {
-        if (confirm(translations[currentLang].confirm_delete_hw || 'حذف هذا الواجب؟')) {
+        if (confirm('Ø­Ø°Ù Ù‡Ø°Ø§ Ø§Ù„ÙˆØ§Ø¬Ø¨ØŸ')) {
             homework = homework.filter(h => h.id !== id);
             saveData();
             renderHomework();
@@ -1452,7 +764,7 @@
     function renderExams() {
         const list = document.getElementById('examsList');
         if (exams.length === 0) {
-            list.innerHTML = '<div class="empty-state"><i class="fas fa-file-alt"></i><h3>' + translations[currentLang].no_exams + '</h3></div>';
+            list.innerHTML = '<div class="empty-state"><i class="fas fa-file-alt"></i><h3>Ù„Ø§ ØªÙˆØ¬Ø¯ Ø§Ù…ØªØ­Ø§Ù†Ø§Øª</h3></div>';
             return;
         }
         list.innerHTML = exams.map(exam => `
@@ -1474,7 +786,7 @@
     }
 
     window.deleteExam = function(id) {
-        if (confirm(translations[currentLang].confirm_delete_exam || 'حذف هذا الامتحان؟')) {
+        if (confirm('Ø­Ø°Ù Ù‡Ø°Ø§ Ø§Ù„Ø§Ù…ØªØ­Ø§Ù†ØŸ')) {
             exams = exams.filter(e => e.id !== id);
             saveData();
             renderExams();
@@ -1510,7 +822,7 @@
         const todayClasses = classes.filter(c => c.date === today);
 
         if (todayClasses.length === 0) {
-            grid.innerHTML = '<div class="empty-state"><i class="fas fa-book-reader"></i><h3>' + translations[currentLang].no_classes + '</h3></div>';
+            grid.innerHTML = '<div class="empty-state"><i class="fas fa-book-reader"></i><h3>Ù„Ù… ØªØ¶Ù Ù…ÙˆØ§Ø¯ Ø§Ù„ÙŠÙˆÙ… Ø¨Ø¹Ø¯</h3></div>';
             return;
         }
 
@@ -1519,7 +831,7 @@
                 <div class="class-card-color" style="background: ${isValidColor(cls.color) ? cls.color : 'var(--primary)'}"></div>
                 <div class="class-card-title">${escapeHtml(cls.name)}</div>
                 <div class="class-card-info">
-                    <span><i class="fas fa-clock"></i> ${cls.duration} دقيقة</span>
+                    <span><i class="fas fa-clock"></i> ${cls.duration} Ø¯Ù‚ÙŠÙ‚Ø©</span>
                 </div>
                 <div class="class-card-actions">
                     <button onclick="deleteClass('${escapeHtml(cls.id)}')"><i class="fas fa-trash"></i></button>
@@ -1538,7 +850,7 @@
     }
 
     window.deleteClass = function(id) {
-        if (confirm(translations[currentLang].confirm_delete_class || 'حذف المادة؟')) {
+        if (confirm('Ø­Ø°Ù Ø§Ù„Ù…Ø§Ø¯Ø©ØŸ')) {
             classes = classes.filter(c => c.id !== id);
             saveData();
             renderClasses();
@@ -1550,9 +862,7 @@
     function renderCalendar() {
         const year = calendarDate.getFullYear();
         const month = calendarDate.getMonth();
-        const monthNamesAr = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
-        const monthNamesEn = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        const monthNames = currentLang === 'ar' ? monthNamesAr : monthNamesEn;
+        const monthNames = ['ÙŠÙ†Ø§ÙŠØ±', 'ÙØ¨Ø±Ø§ÙŠØ±', 'Ù…Ø§Ø±Ø³', 'Ø£Ø¨Ø±ÙŠÙ„', 'Ù…Ø§ÙŠÙˆ', 'ÙŠÙˆÙ†ÙŠÙˆ', 'ÙŠÙˆÙ„ÙŠÙˆ', 'Ø£ØºØ³Ø·Ø³', 'Ø³Ø¨ØªÙ…Ø¨Ø±', 'Ø£ÙƒØªÙˆØ¨Ø±', 'Ù†ÙˆÙÙ…Ø¨Ø±', 'Ø¯ÙŠØ³Ù…Ø¨Ø±'];
         
         const calTitle = document.getElementById('calendarTitle');
         const calBody = document.getElementById('calendarBody');
@@ -1579,14 +889,13 @@
 
     window.showDayEvents = function(dateStr) {
         const events = [];
-        var t = translations[currentLang];
-        homework.filter(h => h.dueDate === dateStr).forEach(h => events.push({ title: h.title, desc: t.nav_homework + ': ' + h.subject }));
-        exams.filter(e => e.date === dateStr).forEach(e => events.push({ title: e.name, desc: t.nav_exams + ': ' + e.subject }));
+        homework.filter(h => h.dueDate === dateStr).forEach(h => events.push({ title: h.title, desc: 'ÙˆØ§Ø¬Ø¨: ' + h.subject }));
+        exams.filter(e => e.date === dateStr).forEach(e => events.push({ title: e.name, desc: 'Ø§Ù…ØªØ­Ø§Ù†: ' + e.subject }));
         
         const list = document.getElementById('eventsList');
         if (!list) return;
         if (events.length === 0) {
-            list.innerHTML = '<div class="empty-state-sm">' + t.no_events + '</div>';
+            list.innerHTML = '<div class="empty-state-sm">Ù„Ø§ ØªÙˆØ¬Ø¯ Ø£Ø­Ø¯Ø§Ø« Ù„Ù‡Ø°Ø§ Ø§Ù„ÙŠÙˆÙ…</div>';
             return;
         }
         list.innerHTML = events.map(e => `
@@ -1676,15 +985,9 @@
         const nextTab = pomoMode === 'work' ? 'work' : (pomoBreakType === 'long' ? 'long' : 'short');
         setActivePomoTab(nextTab);
 
-        playNotificationSound();
-
-        const t = translations[currentLang];
-        const nextLabel = nextTab === 'work' ? t.pomodoro_work : (nextTab === 'long' ? t.pomodoro_long : t.pomodoro_short);
-        showToast(t.notif_pomodoro, t.notif_pomodoro_body + ' ' + nextLabel, 'info');
-
         if ('Notification' in window && Notification.permission === 'granted') {
-            const label = nextTab === 'work' ? t.pomodoro_work : (nextTab === 'long' ? t.pomodoro_long : t.pomodoro_short);
-            new Notification(t.notif_pomodoro, { body: t.notif_pomodoro_body + ' ' + label });
+            const label = nextTab === 'work' ? 'Ø§Ù„Ù…Ø°Ø§ÙƒØ±Ø©' : (nextTab === 'long' ? 'Ø§Ø³ØªØ±Ø§Ø­Ø© Ø·ÙˆÙŠÙ„Ø©' : 'Ø§Ø³ØªØ±Ø§Ø­Ø© Ù‚ØµÙŠØ±Ø©');
+            new Notification('Ø¨ÙˆÙ…ÙˆØ¯ÙˆØ±Ùˆ', { body: 'Ø§Ù†ØªÙ‡Øª Ø§Ù„Ø¬ÙˆÙ„Ø©! ÙˆÙ‚Øª ' + label });
         }
     }
 
@@ -1701,8 +1004,8 @@
 
         const labelEl = document.getElementById('timerLabel');
         if (labelEl) {
-            const labels = { work: 'مذاكرة', break: pomoBreakType === 'long' ? 'استراحة طويلة' : 'استراحة قصيرة' };
-            labelEl.textContent = labels[pomoMode] || 'مذاكرة';
+            const labels = { work: 'Ù…Ø°Ø§ÙƒØ±Ø©', break: pomoBreakType === 'long' ? 'Ø§Ø³ØªØ±Ø§Ø­Ø© Ø·ÙˆÙŠÙ„Ø©' : 'Ø§Ø³ØªØ±Ø§Ø­Ø© Ù‚ØµÙŠØ±Ø©' };
+            labelEl.textContent = labels[pomoMode] || 'Ù…Ø°Ø§ÙƒØ±Ø©';
         }
 
         const circle = document.getElementById('circleProgress');
@@ -1743,16 +1046,15 @@
     function renderPomodoroHistory() {
         const list = document.getElementById('pomoHistoryList');
         if (!list) return;
-        var t = translations[currentLang];
         if (!pomodoro.todayStats.history || pomodoro.todayStats.history.length === 0) {
-            list.innerHTML = '<div class="empty-state-sm">' + t.pomodoro_no_history + '</div>';
+            list.innerHTML = '<div class="empty-state-sm">Ù„Ø§ ØªÙˆØ¬Ø¯ Ø¬ÙˆÙ„Ø§Øª Ù…Ø³Ø¬Ù„Ø© Ø¨Ø¹Ø¯</div>';
             return;
         }
         list.innerHTML = pomodoro.todayStats.history.map(h => `
             <div class="pomo-history-item">
                 <span class="pomo-hist-time">${h.time}</span>
-                <span class="pomo-hist-mode">${h.mode === 'work' ? t.pomodoro_work : t.pomodoro_short}</span>
-                <span class="pomo-hist-dur">${h.duration} ${t.minutes}</span>
+                <span class="pomo-hist-mode">${h.mode === 'work' ? 'Ù…Ø°Ø§ÙƒØ±Ø©' : 'Ø§Ø³ØªØ±Ø§Ø­Ø©'}</span>
+                <span class="pomo-hist-dur">${h.duration} Ø¯Ù‚ÙŠÙ‚Ø©</span>
             </div>
         `).join('');
     }
@@ -1837,7 +1139,7 @@
         if (el = document.getElementById('currentXP')) el.textContent = gamification.xp;
         if (el = document.getElementById('nextLevelXP')) el.textContent = gamification.level * 100;
 
-        const levelTitles = currentLang === 'ar' ? ['مبتدئ', 'متوسط', 'متمرس', 'خبير', 'سيد', 'أسطوري'] : ['Beginner', 'Intermediate', 'Advanced', 'Expert', 'Master', 'Legendary'];
+        const levelTitles = ['Ù…Ø¨ØªØ¯Ø¦', 'Ù…ØªÙˆØ³Ø·', 'Ù…ØªÙ…Ø±Ø³', 'Ø®Ø¨ÙŠØ±', 'Ø³ÙŠØ¯', 'Ø£Ø³Ø·ÙˆØ±ÙŠ'];
         const titleIndex = Math.min(Math.floor(gamification.level / 3), levelTitles.length - 1);
         const titleEl = document.getElementById('levelTitle');
         if (titleEl) titleEl.textContent = levelTitles[titleIndex];
@@ -1849,16 +1151,15 @@
     function renderPointsLog() {
         const list = document.getElementById('pointsLogList');
         if (!list) return;
-        var t = translations[currentLang];
         if (!gamification.pointsLog || gamification.pointsLog.length === 0) {
-            list.innerHTML = '<div class="empty-state-sm">' + t.no_points + '</div>';
+            list.innerHTML = '<div class="empty-state-sm">Ù„Ù… ØªÙƒØ³Ø¨ Ù†Ù‚Ø§Ø·Ø§Ù‹ Ø¨Ø¹Ø¯</div>';
             return;
         }
         list.innerHTML = gamification.pointsLog.slice(0, 5).map(log => `
             <div class="points-log-item">
-                <span class="points-log-points">+${log.points} ${t.points_label}</span>
+                <span class="points-log-points">+${log.points} Ù†Ù‚Ø·Ø©</span>
                 <span class="points-log-reason">${escapeHtml(log.reason)}</span>
-                <small class="points-log-date">${new Date(log.date).toLocaleDateString(currentLang === 'ar' ? 'ar-EG' : 'en-US')}</small>
+                <small class="points-log-date">${new Date(log.date).toLocaleDateString('ar-EG')}</small>
             </div>
         `).join('');
     }
@@ -1910,7 +1211,7 @@
         const upcoming = exams.filter(e => new Date(e.date) >= today).sort((a, b) => new Date(a.date) - new Date(b.date));
         
         if (upcoming.length === 0) {
-            list.innerHTML = '<div class="empty-state-sm">' + translations[currentLang].parent_no_exams + '</div>';
+            list.innerHTML = '<div class="empty-state-sm">Ù„Ø§ ØªÙˆØ¬Ø¯ Ø§Ù…ØªØ­Ø§Ù†Ø§Øª Ù‚Ø§Ø¯Ù…Ø©</div>';
             return;
         }
         list.innerHTML = upcoming.map(exam => `
@@ -1925,7 +1226,7 @@
     function updateParentSchedule() {
         const list = document.getElementById('parentSchedule');
         if (dailySchedule.length === 0) {
-            list.innerHTML = '<div class="empty-state-sm">' + translations[currentLang].parent_no_schedule + '</div>';
+            list.innerHTML = '<div class="empty-state-sm">Ù„Ù… ÙŠØªÙ… Ø¥Ù†Ø´Ø§Ø¡ Ø¬Ø¯ÙˆÙ„ Ø¨Ø¹Ø¯</div>';
             return;
         }
         list.innerHTML = dailySchedule.slice(0, 8).map(item => `
@@ -1939,12 +1240,6 @@
     function generateParentCode() {
         parentCode = 'BTS-' + Math.floor(100000 + Math.random() * 900000);
         localStorage.setItem('bts_parent_code_' + currentUser.id, parentCode);
-        var users = JSON.parse(localStorage.getItem('bts_users') || '[]');
-        var userIndex = users.findIndex(function(u){ return u.id === currentUser.id; });
-        if (userIndex !== -1) {
-            users[userIndex].parentCode = parentCode;
-            localStorage.setItem('bts_users', JSON.stringify(users));
-        }
         const codeEl = document.getElementById('parentCode');
         if (codeEl) codeEl.textContent = parentCode;
     }
@@ -1977,17 +1272,15 @@
 
     function renderExamsTomorrow() {
         const list = document.getElementById('examsTomorrowList');
-        const section = document.getElementById('examsTomorrow');
         if (!list) return;
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
         const tomorrowStr = tomorrow.toISOString().split('T')[0];
         const tomorrowExams = exams.filter(e => e.date === tomorrowStr);
         if (tomorrowExams.length === 0) {
-            if (section) section.style.display = 'none';
+            list.innerHTML = '<div class="empty-state-sm">Ù„Ø§ ØªÙˆØ¬Ø¯ Ø§Ù…ØªØ­Ø§Ù†Ø§Øª ØºØ¯Ø§Ù‹</div>';
             return;
         }
-        if (section) section.style.display = 'block';
         list.innerHTML = tomorrowExams.map(e => `
             <div class="task-card">
                 <div class="timeline-icon exam"><i class="fas fa-file-alt"></i></div>
@@ -2057,25 +1350,25 @@
         errorEl.textContent = '';
         
         if (newPassword.length < 6) {
-            errorEl.textContent = 'يجب أن تكون كلمة المرور الجديدة 6 أحرف على الأقل.';
+            errorEl.textContent = 'ÙŠØ¬Ø¨ Ø£Ù† ØªÙƒÙˆÙ† ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ± Ø§Ù„Ø¬Ø¯ÙŠØ¯Ø© 6 Ø£Ø­Ø±Ù Ø¹Ù„Ù‰ Ø§Ù„Ø£Ù‚Ù„.';
             return;
         }
         if (newPassword !== confirmPassword) {
-            errorEl.textContent = 'كلمتا المرور الجديدتان غير متطابقتين.';
+            errorEl.textContent = 'ÙƒÙ„Ù…ØªØ§ Ø§Ù„Ù…Ø±ÙˆØ± Ø§Ù„Ø¬Ø¯ÙŠØ¯ØªØ§Ù† ØºÙŠØ± Ù…ØªØ·Ø§Ø¨Ù‚ØªÙŠÙ†.';
             return;
         }
 
         const users = JSON.parse(localStorage.getItem('bts_users') || '[]');
         const userIndex = users.findIndex(u => u.id === currentUser.id);
         if (userIndex === -1) {
-            errorEl.textContent = 'حدث خطأ غير متوقع.';
+            errorEl.textContent = 'Ø­Ø¯Ø« Ø®Ø·Ø£ ØºÙŠØ± Ù…ØªÙˆÙ‚Ø¹.';
             return;
         }
 
         try {
             const isValid = await verifyPassword(currentPassword, users[userIndex]);
             if (!isValid) {
-                errorEl.textContent = 'كلمة المرور الحالية غير صحيحة.';
+                errorEl.textContent = 'ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ± Ø§Ù„Ø­Ø§Ù„ÙŠØ© ØºÙŠØ± ØµØ­ÙŠØ­Ø©.';
                 return;
             }
             const salt = generateSalt();
@@ -2086,10 +1379,10 @@
             delete users[userIndex].password;
             
             localStorage.setItem('bts_users', JSON.stringify(users));
-            alert(translations[currentLang].toast_pw_changed);
+            alert('ØªÙ… ØªØºÙŠÙŠØ± ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ± Ø¨Ù†Ø¬Ø§Ø­!');
             document.getElementById('changePasswordForm').reset();
         } catch (err) {
-            errorEl.textContent = 'حدث خطأ أثناء تغيير كلمة المرور.';
+            errorEl.textContent = 'Ø­Ø¯Ø« Ø®Ø·Ø£ Ø£Ø«Ù†Ø§Ø¡ ØªØºÙŠÙŠØ± ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ±.';
         }
     }
 
@@ -2117,7 +1410,131 @@
         currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', currentTheme);
         saveData();
-        showToast(translations[currentLang].toast_theme_changed, currentTheme === 'dark' ? translations[currentLang].toast_dark : translations[currentLang].toast_light, 'info');
+        showToast('ØªÙ… ØªØ¨Ø¯ÙŠÙ„ Ø§Ù„Ø³Ù…Ø©', currentTheme === 'dark' ? 'Ø§Ù„ÙˆØ¶Ø¹ Ø§Ù„Ù…Ø¸Ù„Ù…' : 'Ø§Ù„ÙˆØ¶Ø¹ Ø§Ù„ÙØ§ØªØ­', 'info');
+    }
+
+    // ========================================
+    // Voice Control System (Web Speech API)
+    // ========================================
+    function initVoiceControl() {
+        const voiceBtn = document.getElementById('voiceBtn');
+        if (!voiceBtn) return;
+
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            voiceBtn.title = 'Ø§Ù„Ù…ØªØµÙØ­ Ù„Ø§ ÙŠØ¯Ø¹Ù… Ø§Ù„ØªØ­ÙƒÙ… Ø§Ù„ØµÙˆØªÙŠ';
+            voiceBtn.style.opacity = '0.5';
+            return;
+        }
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.lang = 'ar-SA';
+        recognition.interimResults = true;
+        recognition.maxAlternatives = 1;
+
+        recognition.onstart = function() {
+            isListening = true;
+            voiceBtn.classList.add('listening');
+            var vf = document.getElementById('voiceFeedback');
+            if (vf) vf.classList.add('active');
+        };
+
+        recognition.onend = function() {
+            isListening = false;
+            voiceBtn.classList.remove('listening');
+            setTimeout(function() {
+                var vf = document.getElementById('voiceFeedback');
+                var vt = document.getElementById('voiceTranscript');
+                if (vf) vf.classList.remove('active');
+                if (vt) vt.classList.remove('active');
+            }, 2000);
+        };
+
+        recognition.onresult = function(event) {
+            let transcript = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                transcript += event.results[i][0].transcript;
+            }
+            var vt = document.getElementById('voiceTranscript');
+            if (vt) {
+                vt.textContent = transcript;
+                vt.classList.add('active');
+            }
+
+            if (event.results[event.resultIndex].isFinal) {
+                processVoiceCommand(transcript.trim().toLowerCase());
+            }
+        };
+
+        recognition.onerror = function(event) {
+            isListening = false;
+            voiceBtn.classList.remove('listening');
+            var vf = document.getElementById('voiceFeedback');
+            if (vf) vf.classList.remove('active');
+            if (event.error !== 'no-speech') {
+                showToast('Ø®Ø·Ø£ ØµÙˆØªÙŠ', 'Ø­Ø¯Ø« Ø®Ø·Ø£ Ø£Ø«Ù†Ø§Ø¡ Ø§Ù„Ø§Ø³ØªÙ…Ø§Ø¹', 'danger');
+            }
+        };
+
+        voiceBtn.addEventListener('click', toggleVoice);
+    }
+
+    function toggleVoice() {
+        if (!recognition) return;
+        if (isListening) {
+            recognition.stop();
+        } else {
+            try {
+                recognition.start();
+            } catch(e) {
+                recognition.stop();
+                setTimeout(function() { recognition.start(); }, 100);
+            }
+        }
+    }
+
+    function processVoiceCommand(command) {
+        if (command.includes('Ø¬Ø¯ÙˆÙ„') || command.includes('ØªÙ†Ø¸ÙŠÙ…') || command.includes('Ø®Ø·Ø©')) {
+            generateDailySchedule();
+            showToast('ØªÙ… Ø¥Ù†Ø´Ø§Ø¡ Ø§Ù„Ø¬Ø¯ÙˆÙ„', 'ØªÙ… Ø¥Ù†Ø´Ø§Ø¡ Ø¬Ø¯ÙˆÙ„ ÙŠÙˆÙ…Ùƒ Ø¨Ù†Ø¬Ø§Ø­', 'success');
+        } else if (command.includes('ÙˆØ§Ø¬Ø¨') || command.includes('ÙˆØ§Ø¬Ø¨Ø§Øª')) {
+            navigateTo('homework');
+            showToast('Ø§Ù„ÙˆØ§Ø¬Ø¨Ø§Øª', 'ØªÙ… Ø§Ù„Ø§Ù†ØªÙ‚Ø§Ù„ Ù„ØµÙØ­Ø© Ø§Ù„ÙˆØ§Ø¬Ø¨Ø§Øª', 'info');
+        } else if (command.includes('Ø§Ù…ØªØ­Ø§Ù†') || command.includes('Ø§Ø®ØªØ¨Ø§Ø±')) {
+            navigateTo('exams');
+            showToast('Ø§Ù„Ø§Ù…ØªØ­Ø§Ù†Ø§Øª', 'ØªÙ… Ø§Ù„Ø§Ù†ØªÙ‚Ø§Ù„ Ù„ØµÙØ­Ø© Ø§Ù„Ø§Ù…ØªØ­Ø§Ù†Ø§Øª', 'info');
+        } else if (command.includes('Ø¥Ø¶Ø§ÙØ© ÙˆØ§Ø¬Ø¨')) {
+            var hwModal = document.getElementById('homeworkModal');
+            if (hwModal) hwModal.classList.add('active');
+        } else if (command.includes('Ø¥Ø¶Ø§ÙØ© Ø§Ù…ØªØ­Ø§Ù†')) {
+            var exModal = document.getElementById('examModal');
+            if (exModal) exModal.classList.add('active');
+        } else if (command.includes('Ø¥Ø¶Ø§ÙØ© Ù…Ø§Ø¯Ø©') || command.includes('Ù…Ø§Ø¯Ø© Ø¬Ø¯ÙŠØ¯Ø©')) {
+            var clModal = document.getElementById('classModal');
+            if (clModal) clModal.classList.add('active');
+        } else if (command.includes('Ù…Ø¤Ù‚Øª') || command.includes('Ø¨ÙˆÙ…ÙˆØ¯ÙˆØ±Ùˆ') || command.includes(' Timer')) {
+            navigateTo('pomodoro');
+        } else if (command.includes('Ø¥Ù†Ø¬Ø§Ø²') || command.includes('Ù†Ù‚Ø§Ø·') || command.includes('Ø´Ø§Ø±Ø§Øª')) {
+            navigateTo('achievements');
+        } else if (command.includes('ØªØªØ¨Ø¹') || command.includes('Ù…Ù‡Ø§Ù…')) {
+            navigateTo('tasktracking');
+        } else if (command.includes('Ù„ÙˆØ­Ø© Ø§Ù„ØªØ­ÙƒÙ…') || command.includes('Ø±Ø¦ÙŠØ³ÙŠØ©')) {
+            navigateTo('dashboard');
+        } else if (command.includes('Ø¥Ø´Ø¹Ø§Ø±Ø§Øª') || command.includes('ØªÙ†Ø¨ÙŠÙ‡')) {
+            navigateTo('settings');
+        } else if (command.includes('ØªØµØ¯ÙŠØ±')) {
+            exportData();
+        } else if (command.includes('Ù…ÙˆØ§Ø¯ Ø§Ù„ÙŠÙˆÙ…') || command.includes('Ø­ØµØµ')) {
+            navigateTo('classes');
+        } else if (command.includes('ØªÙ‚ÙˆÙŠÙ…')) {
+            navigateTo('calendar');
+        } else {
+            var chatInput = document.getElementById('chatInput');
+            if (chatInput) {
+                chatInput.value = command;
+                sendChatMessage();
+            }
+        }
     }
 
     // ========================================
@@ -2187,24 +1604,22 @@
         const hour = new Date().getHours();
         if (hour < 9 || hour > 21) return;
         localStorage.setItem(todayKey, today);
-        var t = translations[currentLang];
-        new Notification(t.toast_reminder_title, {
-            body: t.toast_daily_reminder,
-            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔔</text></svg>'
+        new Notification('ØªØ°ÙƒÙŠØ± ÙŠÙˆÙ…ÙŠ!', {
+            body: 'Ù„Ø§ ØªÙ†Ø³ÙŽ Ù…ØªØ§Ø¨Ø¹Ø© Ø¬Ø¯ÙˆÙ„Ùƒ Ø§Ù„ÙŠÙˆÙ…ÙŠ. Ø£Ù†Øª ØªÙ‚Ø¯Ù… Ø±Ø§Ø¦Ø¹Ø§Ù‹!',
+            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">ðŸ””</text></svg>'
         });
-        showToast(t.toast_reminder_title, t.toast_daily_reminder);
+        showToast('ØªØ°ÙƒÙŠØ±', 'ØªØ°ÙƒÙŠØ± ÙŠÙˆÙ…ÙŠ: Ù„Ø§ ØªÙ†Ø³ÙŽ Ù…ØªØ§Ø¨Ø¹Ø© Ø¬Ø¯ÙˆÙ„Ùƒ!');
     }
 
     function checkHomeworkNotifications() {
         if (!notificationSettings.homework) return;
         if (!('Notification' in window) || Notification.permission !== 'granted') return;
-        var t = translations[currentLang];
         const today = new Date().toISOString().split('T')[0];
         const dueToday = homework.filter(h => !h.completed && h.dueDate === today);
         if (dueToday.length > 0 && Notification.permission === 'granted') {
-            new Notification(t.notif_hw_due, {
-                body: t.notif_hw_due_body + ' ' + dueToday.length + ' ' + t.notif_hw_due_count,
-                icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">📚</text></svg>'
+            new Notification('ÙˆØ§Ø¬Ø¨Ø§Øª Ù…Ø³ØªØ­Ù‚Ø© Ø§Ù„ÙŠÙˆÙ…!', {
+                body: 'Ù„Ø¯ÙŠÙƒ ' + dueToday.length + ' ÙˆØ§Ø¬Ø¨Ø§Øª Ù…Ø³ØªØ­Ù‚Ø© Ø§Ù„ÙŠÙˆÙ…',
+                icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">ðŸ“š</text></svg>'
             });
         }
         const tomorrow = new Date();
@@ -2212,8 +1627,8 @@
         const tomorrowStr = tomorrow.toISOString().split('T')[0];
         const dueTomorrow = homework.filter(h => !h.completed && h.dueDate === tomorrowStr);
         if (dueTomorrow.length > 0 && Notification.permission === 'granted') {
-            new Notification(t.notif_hw_tomorrow, {
-                body: t.notif_hw_tomorrow_body + ' ' + dueTomorrow.length + ' ' + t.notif_hw_tomorrow_count
+            new Notification('ÙˆØ§Ø¬Ø¨Ø§Øª Ù…Ø³ØªØ­Ù‚Ø© ØºØ¯Ø§Ù‹!', {
+                body: 'Ù„Ø¯ÙŠÙƒ ' + dueTomorrow.length + ' ÙˆØ§Ø¬Ø¨Ø§Øª Ù…Ø³ØªØ­Ù‚Ø© ØºØ¯Ø§Ù‹'
             });
         }
     }
@@ -2221,12 +1636,11 @@
     function checkExamNotifications() {
         if (!notificationSettings.exams) return;
         if (!('Notification' in window) || Notification.permission !== 'granted') return;
-        var t = translations[currentLang];
         const today = new Date().toISOString().split('T')[0];
         const todayExams = exams.filter(e => e.date === today);
         if (todayExams.length > 0 && Notification.permission === 'granted') {
-            new Notification(t.notif_exam_today, {
-                body: t.notif_exam_today_body + ' ' + todayExams.length + ' ' + t.notif_exam_today_count + ' ' + todayExams.map(e => e.name).join(', ')
+            new Notification('Ø§Ù…ØªØ­Ø§Ù† Ø§Ù„ÙŠÙˆÙ…!', {
+                body: 'Ù„Ø¯ÙŠÙƒ ' + todayExams.length + ' Ø§Ù…ØªØ­Ø§Ù†Ø§Øª Ø§Ù„ÙŠÙˆÙ…: ' + todayExams.map(e => e.name).join(', ')
             });
         }
         const tomorrow = new Date();
@@ -2234,8 +1648,8 @@
         const tomorrowStr = tomorrow.toISOString().split('T')[0];
         const tomorrowExams = exams.filter(e => e.date === tomorrowStr);
         if (tomorrowExams.length > 0 && Notification.permission === 'granted') {
-            new Notification(t.notif_exam_tomorrow, {
-                body: t.notif_exam_tomorrow_body + ' ' + tomorrowExams.length + ' ' + t.notif_exam_tomorrow_count + ' ' + tomorrowExams.map(e => e.name).join(', ')
+            new Notification('Ø§Ù…ØªØ­Ø§Ù† ØºØ¯Ø§Ù‹!', {
+                body: 'Ù„Ø¯ÙŠÙƒ ' + tomorrowExams.length + ' Ø§Ù…ØªØ­Ø§Ù†Ø§Øª ØºØ¯Ø§Ù‹: ' + tomorrowExams.map(e => e.name).join(', ')
             });
         }
     }
@@ -2243,7 +1657,6 @@
     function checkScheduleNotifications() {
         if (!notificationSettings.schedule || dailySchedule.length === 0) return;
         if (!('Notification' in window) || Notification.permission !== 'granted') return;
-        var t = translations[currentLang];
         const now = new Date();
         const currentTime = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
         const currentMin = timeToMinutes(currentTime);
@@ -2251,7 +1664,7 @@
         dailySchedule.forEach(function(item) {
             const itemMin = timeToMinutes(item.time);
             if (Math.abs(itemMin - currentMin) === 0 && Notification.permission === 'granted') {
-                new Notification(t.notif_schedule, { body: item.activity });
+                new Notification('ØªØ°ÙƒÙŠØ± Ø¨Ø§Ù„Ø¬Ø¯ÙˆÙ„', { body: item.activity });
             }
         });
     }
@@ -2313,7 +1726,7 @@
         renderTodayChecklist();
         updateTrackingStats();
         document.getElementById('timeBlockForm').reset();
-        showToast(translations[currentLang].save, translations[currentLang].toast_block_added, 'success');
+        showToast('ØªÙ…Øª Ø§Ù„Ø¥Ø¶Ø§ÙØ©', 'ØªÙ…Øª Ø¥Ø¶Ø§ÙØ© Ø¨Ù„ÙˆÙƒ Ø§Ù„ÙˆÙ‚Øª Ø¨Ù†Ø¬Ø§Ø­', 'success');
     }
 
     function renderTimeBlocks() {
@@ -2323,19 +1736,18 @@
         const todayBlocks = timeBlocks.filter(b => b.date === today);
 
         if (todayBlocks.length === 0) {
-            grid.innerHTML = '<div class="empty-state-sm">' + translations[currentLang].tracking_no_blocks + '</div>';
+            grid.innerHTML = '<div class="empty-state-sm">Ù„Ù… ØªØ¶Ù Ø¨Ù„ÙˆÙƒØ§Øª ÙˆÙ‚Øª Ø¨Ø¹Ø¯</div>';
             return;
         }
 
-        var t = translations[currentLang];
-        const typeLabels = { study: t.type_study, review: t.type_review, homework: t.type_homework, project: t.type_project };
+        const typeLabels = { study: 'Ù…Ø°Ø§ÙƒØ±Ø©', review: 'Ù…Ø±Ø§Ø¬Ø¹Ø©', homework: 'ÙˆØ§Ø¬Ø¨', project: 'Ù…Ø´Ø±ÙˆØ¹' };
         const typeIcons = { study: 'book', review: 'redo', homework: 'book-open', project: 'project-diagram' };
 
         grid.innerHTML = todayBlocks.sort(function(a, b) { return timeToMinutes(a.startTime) - timeToMinutes(b.startTime); }).map(function(block) {
             return '<div class="time-block-item priority-' + block.priority + ' ' + (block.completed ? 'completed' : '') + '">' +
                 '<div class="time-block-time">' +
                     '<div class="start-time">' + formatTime12(block.startTime) + '</div>' +
-                    '<div class="end-time">' + (currentLang === 'ar' ? 'إلى ' : 'to ') + formatTime12(block.endTime) + '</div>' +
+                    '<div class="end-time">Ø¥Ù„Ù‰ ' + formatTime12(block.endTime) + '</div>' +
                 '</div>' +
                 '<div class="time-block-info">' +
                     '<div class="time-block-title">' + escapeHtml(block.title) + '</div>' +
@@ -2346,7 +1758,7 @@
                     '</div>' +
                 '</div>' +
                 '<div class="task-actions">' +
-                    '<button onclick="toggleTimeBlock(\'' + escapeHtml(block.id) + '\')" title="' + (block.completed ? t.cancel : t.btn_add) + '"><i class="fas fa-' + (block.completed ? 'undo' : 'check') + '"></i></button>' +
+                    '<button onclick="toggleTimeBlock(\'' + escapeHtml(block.id) + '\')" title="' + (block.completed ? 'Ø¥Ù„ØºØ§Ø¡' : 'Ø¥ØªÙ…Ø§Ù…') + '"><i class="fas fa-' + (block.completed ? 'undo' : 'check') + '"></i></button>' +
                     '<button onclick="deleteTimeBlock(\'' + escapeHtml(block.id) + '\')"><i class="fas fa-trash"></i></button>' +
                 '</div>' +
             '</div>';
@@ -2370,7 +1782,7 @@
     };
 
     window.deleteTimeBlock = function(id) {
-        if (confirm(translations[currentLang].confirm_delete_block || 'حذف بلوك الوقت؟')) {
+        if (confirm('Ø­Ø°Ù Ø¨Ù„ÙˆÙƒ Ø§Ù„ÙˆÙ‚ØªØŸ')) {
             timeBlocks = timeBlocks.filter(function(b) { return b.id !== id; });
             saveData();
             renderTimeBlocks();
@@ -2386,7 +1798,7 @@
         const todayBlocks = timeBlocks.filter(function(b) { return b.date === today; });
 
         if (todayBlocks.length === 0) {
-            container.innerHTML = '<div class="empty-state-sm">' + translations[currentLang].tracking_no_blocks + '</div>';
+            container.innerHTML = '<div class="empty-state-sm">Ø£Ø¶Ù Ø¨Ù„ÙˆÙƒØ§Øª ÙˆÙ‚Øª Ù„ØªØ¸Ù‡Ø± Ù…Ù‡Ø§Ù…Ùƒ Ù‡Ù†Ø§</div>';
             return;
         }
 
@@ -2405,11 +1817,12 @@
     }
 
     function renderWeeklyActivity() {
-        const grid = document.getElementById('taskWeeklyActivityGrid');
+        const grid = document.getElementById('weeklyActivityGrid');
         const achGrid = document.getElementById('achievementsActivityGrid');
-        if (!grid && !achGrid) return;
+        const studyGrid = document.getElementById('studyActivityGrid');
+        if (!grid && !achGrid && !studyGrid) return;
 
-        const dayLabels = currentLang === 'ar' ? ['سب','أح','إث','ثل','أر','خم','جم'] : ['Sat','Sun','Mon','Tue','Wed','Thu','Fri'];
+        const dayLabels = ['Ø³Ø¨', 'Ø£Ø­', 'Ø¥Ø«', 'Ø«Ù„', 'Ø£Ø±', 'Ø®Ù…', 'Ø¬Ù…'];
         const today = new Date();
         let html = '';
 
@@ -2430,6 +1843,7 @@
 
         if (grid) grid.innerHTML = html;
         if (achGrid) achGrid.innerHTML = html;
+        if (studyGrid) studyGrid.innerHTML = html;
     }
 
     function updateTrackingStats() {
@@ -2442,14 +1856,25 @@
         const pct = todayBlocks.length > 0 ? Math.round((completedBlocks.length / todayBlocks.length) * 100) : 0;
 
         // page-tasktracking IDs
-        var el1 = document.getElementById('taskTotalStudyHours');
-        var el2 = document.getElementById('taskCompletedBlocks');
-        var el3 = document.getElementById('taskStudyStreak');
-        var el4 = document.getElementById('taskEfficiencyScore');
+        var el1 = document.getElementById('totalStudyHours');
+        var el2 = document.getElementById('completedBlocks');
+        var el3 = document.getElementById('studyStreak');
+        var el4 = document.getElementById('efficiencyScore');
         if (el1) el1.textContent = (totalMinutes / 60).toFixed(1);
         if (el2) el2.textContent = completedBlocks.length;
         if (el3) el3.textContent = gamification.streak;
         if (el4) el4.textContent = pct + '%';
+
+        // page-studyTracker IDs
+        var el5 = document.getElementById('studyTotalHours');
+        var el6 = document.getElementById('studyCompletedBlocks');
+        var el7 = document.getElementById('studyStreakVal');
+        var el8 = document.getElementById('studyEfficiency');
+        if (el5) el5.textContent = (totalMinutes / 60).toFixed(1);
+        if (el6) el6.textContent = completedBlocks.length;
+        if (el7) el7.textContent = gamification.streak;
+        if (el8) el8.textContent = pct + '%';
+
     }
 
     function markActivity() {
@@ -2463,7 +1888,8 @@
     // ========================================
     function generateHabitInsights() {
         const container = document.getElementById('habitInsights');
-        if (!container) return;
+        const studyContainer = document.getElementById('studyHabitInsights');
+        if (!container && !studyContainer) return;
 
         const insights = [];
         const today = new Date().toISOString().split('T')[0];
@@ -2471,9 +1897,9 @@
         if (homework.length > 0) {
             const completedRatio = homework.filter(function(h) { return h.completed; }).length / homework.length;
             if (completedRatio >= 0.8) {
-                insights.push({ type: 'success', icon: 'fa-check-circle', title: 'أداء ممتاز!', text: 'أكملت ' + Math.round(completedRatio * 100) + '% من واجباتك. استمر في هذا الأداء الرائع!' });
+                insights.push({ type: 'success', icon: 'fa-check-circle', title: 'Ø£Ø¯Ø§Ø¡ Ù…Ù…ØªØ§Ø²!', text: 'Ø£ÙƒÙ…Ù„Øª ' + Math.round(completedRatio * 100) + '% Ù…Ù† ÙˆØ§Ø¬Ø¨Ø§ØªÙƒ. Ø§Ø³ØªÙ…Ø± ÙÙŠ Ù‡Ø°Ø§ Ø§Ù„Ø£Ø¯Ø§Ø¡ Ø§Ù„Ø±Ø§Ø¦Ø¹!' });
             } else if (completedRatio < 0.4) {
-                insights.push({ type: 'warning', icon: 'fa-exclamation-triangle', title: 'يجب مراجعة الواجبات', text: 'لديك ' + homework.filter(function(h) { return !h.completed; }).length + ' واجبات معلقة. حاول تخصيص أوقات محددة للإنجاز.' });
+                insights.push({ type: 'warning', icon: 'fa-exclamation-triangle', title: 'ÙŠØ¬Ø¨ Ù…Ø±Ø§Ø¬Ø¹Ø© Ø§Ù„ÙˆØ§Ø¬Ø¨Ø§Øª', text: 'Ù„Ø¯ÙŠÙƒ ' + homework.filter(function(h) { return !h.completed; }).length + ' ÙˆØ§Ø¬Ø¨Ø§Øª Ù…Ø¹Ù„Ù‚Ø©. Ø­Ø§ÙˆÙ„ ØªØ®ØµÙŠØµ Ø£ÙˆÙ‚Ø§Øª Ù…Ø­Ø¯Ø¯Ø© Ù„Ù„Ø¥Ù†Ø¬Ø§Ø².' });
             }
         }
 
@@ -2483,28 +1909,28 @@
             if (nearestExam) {
                 const daysUntil = Math.ceil((new Date(nearestExam.date) - new Date()) / (1000 * 60 * 60 * 24));
                 if (daysUntil <= 3) {
-                    insights.push({ type: 'warning', icon: 'fa-clock', title: 'امتحان قريب!', text: 'امتحان ' + nearestExam.subject + ' بعد ' + daysUntil + ' أيام. ركز على المراجعة المكثفة.' });
+                    insights.push({ type: 'warning', icon: 'fa-clock', title: 'Ø§Ù…ØªØ­Ø§Ù† Ù‚Ø±ÙŠØ¨!', text: 'Ø§Ù…ØªØ­Ø§Ù† ' + nearestExam.subject + ' Ø¨Ø¹Ø¯ ' + daysUntil + ' Ø£ÙŠØ§Ù…. Ø±ÙƒØ² Ø¹Ù„Ù‰ Ø§Ù„Ù…Ø±Ø§Ø¬Ø¹Ø© Ø§Ù„Ù…ÙƒØ«ÙØ©.' });
                 } else if (daysUntil <= 7) {
-                    insights.push({ type: 'tip', icon: 'fa-lightbulb', title: 'تخطيط للامتحان', text: 'امتحان ' + nearestExam.subject + ' بعد ' + daysUntil + ' أيام. ابدأ بمراجعة المواد الأساسية.' });
+                    insights.push({ type: 'tip', icon: 'fa-lightbulb', title: 'ØªØ®Ø·ÙŠØ· Ù„Ù„Ø§Ù…ØªØ­Ø§Ù†', text: 'Ø§Ù…ØªØ­Ø§Ù† ' + nearestExam.subject + ' Ø¨Ø¹Ø¯ ' + daysUntil + ' Ø£ÙŠØ§Ù…. Ø§Ø¨Ø¯Ø£ Ø¨Ù…Ø±Ø§Ø¬Ø¹Ø© Ø§Ù„Ù…ÙˆØ§Ø¯ Ø§Ù„Ø£Ø³Ø§Ø³ÙŠØ©.' });
                 }
             }
         }
 
         if (gamification.streak >= 3) {
-            insights.push({ type: 'success', icon: 'fa-fire', title: 'سلسلة نشاط!', text: 'أنت نشط منذ ' + gamification.streak + ' أيام متتالية. هذا رائع للحفاظ على الإيقاع!' });
+            insights.push({ type: 'success', icon: 'fa-fire', title: 'Ø³Ù„Ø³Ù„Ø© Ù†Ø´Ø§Ø·!', text: 'Ø£Ù†Øª Ù†Ø´Ø· Ù…Ù†Ø° ' + gamification.streak + ' Ø£ÙŠØ§Ù… Ù…ØªØªØ§Ù„ÙŠØ©. Ù‡Ø°Ø§ Ø±Ø§Ø¦Ø¹ Ù„Ù„Ø­ÙØ§Ø¸ Ø¹Ù„Ù‰ Ø§Ù„Ø¥ÙŠÙ‚Ø§Ø¹!' });
         }
 
         if (pomodoro.todayStats.completedSessions >= 4) {
-            insights.push({ type: 'success', icon: 'fa-clock', title: 'مذاكرة منظمة!', text: 'أكملت ' + pomodoro.todayStats.completedSessions + ' جولات بومودورو اليوم. هذا يحسن التركيز والتركيز.' });
+            insights.push({ type: 'success', icon: 'fa-clock', title: 'Ù…Ø°Ø§ÙƒØ±Ø© Ù…Ù†Ø¸Ù…Ø©!', text: 'Ø£ÙƒÙ…Ù„Øª ' + pomodoro.todayStats.completedSessions + ' Ø¬ÙˆÙ„Ø§Øª Ø¨ÙˆÙ…ÙˆØ¯ÙˆØ±Ùˆ Ø§Ù„ÙŠÙˆÙ…. Ù‡Ø°Ø§ ÙŠØ­Ø³Ù† Ø§Ù„ØªØ±ÙƒÙŠØ² ÙˆØ§Ù„ØªØ±ÙƒÙŠØ².' });
         }
 
         const totalStudyMin = classes.filter(function(c) { return c.date === today; }).reduce(function(sum, c) { return sum + c.duration; }, 0) + pomodoro.todayStats.totalMinutes;
         if (totalStudyMin < 60 && new Date().getHours() > 16) {
-            insights.push({ type: 'tip', icon: 'fa-lightbulb', title: 'مذاكرة إضافية', text: 'لدت مذاكرتك اليوم قليلة. حاول إضافة بلوك وقت إضافي للمراجعة.' });
+            insights.push({ type: 'tip', icon: 'fa-lightbulb', title: 'Ù…Ø°Ø§ÙƒØ±Ø© Ø¥Ø¶Ø§ÙÙŠØ©', text: 'Ù„Ø¯Øª Ù…Ø°Ø§ÙƒØ±ØªÙƒ Ø§Ù„ÙŠÙˆÙ… Ù‚Ù„ÙŠÙ„Ø©. Ø­Ø§ÙˆÙ„ Ø¥Ø¶Ø§ÙØ© Ø¨Ù„ÙˆÙƒ ÙˆÙ‚Øª Ø¥Ø¶Ø§ÙÙŠ Ù„Ù„Ù…Ø±Ø§Ø¬Ø¹Ø©.' });
         }
 
         if (insights.length === 0) {
-            insights.push({ type: 'tip', icon: 'fa-info-circle', title: 'ابدأ النشاط', text: 'أضف واجباتك وامتحاناتك ومواد اليوم للحصول على تحليلات ذكية مخصصة لعاداتك.' });
+            insights.push({ type: 'tip', icon: 'fa-info-circle', title: 'Ø§Ø¨Ø¯Ø£ Ø§Ù„Ù†Ø´Ø§Ø·', text: 'Ø£Ø¶Ù ÙˆØ§Ø¬Ø¨Ø§ØªÙƒ ÙˆØ§Ù…ØªØ­Ø§Ù†Ø§ØªÙƒ ÙˆÙ…ÙˆØ§Ø¯ Ø§Ù„ÙŠÙˆÙ… Ù„Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ ØªØ­Ù„ÙŠÙ„Ø§Øª Ø°ÙƒÙŠØ© Ù…Ø®ØµØµØ© Ù„Ø¹Ø§Ø¯Ø§ØªÙƒ.' });
         }
 
         const insightsHtml = insights.map(function(insight) {
@@ -2518,6 +1944,7 @@
         }).join('');
 
         if (container) container.innerHTML = insightsHtml;
+        if (studyContainer) studyContainer.innerHTML = insightsHtml;
     }
 
     // ========================================
@@ -2553,7 +1980,7 @@
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
-        showToast(translations[currentLang].toast_export_title, translations[currentLang].toast_export_success, 'success');
+        showToast('ØªÙ… Ø§Ù„ØªØµØ¯ÙŠØ±', 'ØªÙ… ØªØµØ¯ÙŠØ± Ø¬Ù…ÙŠØ¹ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ø¨Ù†Ø¬Ø§Ø­', 'success');
     }
 
     function importData(file) {
@@ -2562,11 +1989,11 @@
             try {
                 const imported = JSON.parse(e.target.result);
                 if (!imported.data || imported.version !== '2.0') {
-                    showToast(translations[currentLang].close, translations[currentLang].toast_import_error, 'danger');
+                    showToast('Ø®Ø·Ø£', 'Ù…Ù„Ù Ø§Ù„Ø§Ø³ØªÙŠØ±Ø§Ø¯ ØºÙŠØ± ØµØ§Ù„Ø­', 'danger');
                     return;
                 }
 
-                if (!confirm(translations[currentLang].toast_import_confirm)) return;
+                if (!confirm('Ø³ÙŠØªÙ… Ø§Ø³ØªØ¨Ø¯Ø§Ù„ Ø¬Ù…ÙŠØ¹ Ø¨ÙŠØ§Ù†Ø§ØªÙƒ Ø§Ù„Ø­Ø§Ù„ÙŠØ© Ø¨Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ù…Ø³ØªÙˆØ±Ø¯Ø©. Ù‡Ù„ Ø£Ù†Øª Ù…ØªØ£ÙƒØ¯ØŸ')) return;
 
                 homework = imported.data.homework || [];
                 exams = imported.data.exams || [];
@@ -2581,9 +2008,9 @@
 
                 saveData();
                 loadData();
-                showToast(translations[currentLang].toast_import_title, translations[currentLang].toast_import_success, 'success');
+                showToast('ØªÙ… Ø§Ù„Ø§Ø³ØªÙŠØ±Ø§Ø¯', 'ØªÙ… Ø§Ø³ØªÙŠØ±Ø§Ø¯ Ø¬Ù…ÙŠØ¹ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ø¨Ù†Ø¬Ø§Ø­', 'success');
             } catch(err) {
-                showToast(translations[currentLang].close, translations[currentLang].toast_import_error2, 'danger');
+                showToast('Ø®Ø·Ø£', 'Ø­Ø¯Ø« Ø®Ø·Ø£ Ø£Ø«Ù†Ø§Ø¡ Ù‚Ø±Ø§Ø¡Ø© Ø§Ù„Ù…Ù„Ù', 'danger');
             }
         };
         reader.readAsText(file);
@@ -2606,60 +2033,59 @@
     // Enhanced AI Response with Habit Analysis
     // ========================================
     function generateAIResponse(message) {
-        var t = translations[currentLang];
         const lowerMsg = message.toLowerCase();
 
-        if (lowerMsg.includes('جدول') || lowerMsg.includes('تنظيم') || lowerMsg.includes('خطة')) {
+        if (lowerMsg.includes('Ø¬Ø¯ÙˆÙ„') || lowerMsg.includes('ØªÙ†Ø¸ÙŠÙ…') || lowerMsg.includes('Ø®Ø·Ø©')) {
             generateDailySchedule();
-            return t.ai_resp_schedule;
+            return 'ØªÙ… Ø¥Ù†Ø´Ø§Ø¡ Ø¬Ø¯ÙˆÙ„ ÙŠÙˆÙ…Ùƒ Ø¨Ù†Ø§Ø¡Ù‹ Ø¹Ù„Ù‰ Ø§Ù„ÙˆÙ‚Øª Ø§Ù„Ù…Ø­Ø¯Ø¯! ÙŠÙ…ÙƒÙ†Ùƒ Ù…Ø´Ø§Ù‡Ø¯ØªÙ‡ ÙÙŠ Ù‚Ø³Ù… "Ø§Ù„Ø¬Ø¯ÙˆÙ„ Ø§Ù„ÙŠÙˆÙ…ÙŠ" Ø£Ùˆ ÙÙŠ Ø§Ù„Ø´Ø±ÙŠØ· Ø§Ù„Ø¬Ø§Ù†Ø¨ÙŠ.';
         }
-        if (lowerMsg.includes('حصص') || lowerMsg.includes('حصة') || lowerMsg.includes('مواد')) {
+        if (lowerMsg.includes('Ø­ØµØµ') || lowerMsg.includes('Ø­ØµØ©') || lowerMsg.includes('Ù…ÙˆØ§Ø¯')) {
             const todayDate = new Date().toISOString().split('T')[0];
             const todaySubjects = classes.filter(function(c) { return c.date === todayDate; });
             if (todaySubjects.length > 0) {
                 const totalTime = todaySubjects.reduce(function(sum, s) { return sum + (s.duration || 45); }, 0);
-                return t.ai_resp_classes_count + todaySubjects.length + t.ai_resp_classes_minutes + totalTime + t.minutes + '):<br>' +
-                    todaySubjects.map(function(c) { return '• ' + escapeHtml(c.name) + ' - ' + c.duration + ' ' + t.minutes + ' (' + t.task_priority + ': ' + getPriorityLabel(c.priority) + ')'; }).join('<br>');
+                return 'Ù„Ø¯ÙŠÙƒ ' + todaySubjects.length + ' Ù…ÙˆØ§Ø¯ Ø§Ù„ÙŠÙˆÙ… (' + totalTime + ' Ø¯Ù‚ÙŠÙ‚Ø© Ù…Ø°Ø§ÙƒØ±Ø©):<br>' +
+                    todaySubjects.map(function(c) { return 'â€¢ ' + escapeHtml(c.name) + ' - ' + c.duration + ' Ø¯Ù‚ÙŠÙ‚Ø© (Ø§Ù„Ø£ÙˆÙ„ÙˆÙŠØ©: ' + (c.priority === 'high' ? 'Ø¹Ø§Ù„ÙŠØ©' : c.priority === 'medium' ? 'Ù…ØªÙˆØ³Ø·Ø©' : 'Ù…Ù†Ø®ÙØ¶Ø©') + ')'; }).join('<br>');
             }
-            return t.ai_resp_no_classes;
+            return 'Ù„Ù… ØªØ¶Ù Ù…ÙˆØ§Ø¯ Ø§Ù„ÙŠÙˆÙ… Ø¨Ø¹Ø¯. Ø£Ø¶Ù Ø§Ù„Ù…ÙˆØ§Ø¯ Ø§Ù„ØªÙŠ Ø¯Ø±Ø³ØªÙ‡Ø§ Ø§Ù„ÙŠÙˆÙ… Ù„ØªØ¸Ù‡Ø± Ù‡Ù†Ø§.';
         }
-        if (lowerMsg.includes('واجب')) {
+        if (lowerMsg.includes('ÙˆØ§Ø¬Ø¨')) {
             const todayHw = homework.filter(function(h) { return !h.completed; });
             if (todayHw.length > 0) {
-                return t.ai_resp_hw_count + todayHw.length + t.ai_resp_hw_list + '<br>' +
-                    todayHw.map(function(h) { return '• ' + escapeHtml(h.title) + ' - ' + escapeHtml(h.subject); }).join('<br>');
+                return 'Ù„Ø¯ÙŠÙƒ ' + todayHw.length + ' ÙˆØ§Ø¬Ø¨Ø§Øª ØºÙŠØ± Ù…ÙƒØªÙ…Ù„Ø©:<br>' +
+                    todayHw.map(function(h) { return 'â€¢ ' + escapeHtml(h.title) + ' - ' + escapeHtml(h.subject); }).join('<br>');
             }
-            return t.ai_resp_no_hw;
+            return 'Ù„Ø§ ØªÙˆØ¬Ø¯ ÙˆØ§Ø¬Ø¨Ø§Øª Ù…Ø³ØªØ­Ù‚Ø© Ø§Ù„ÙŠÙˆÙ….';
         }
-        if (lowerMsg.includes('امتحان') || lowerMsg.includes('اختبار')) {
+        if (lowerMsg.includes('Ø§Ù…ØªØ­Ø§Ù†') || lowerMsg.includes('Ø§Ø®ØªØ¨Ø§Ø±')) {
             const upcomingExams = exams.filter(function(e) { return new Date(e.date) >= new Date(); }).slice(0, 3);
             if (upcomingExams.length > 0) {
-                return t.ai_resp_exams + '<br>' +
-                    upcomingExams.map(function(e) { return '• ' + escapeHtml(e.name) + ' - ' + escapeHtml(e.subject) + ' (' + formatDate(e.date) + ')'; }).join('<br>');
+                return 'Ø§Ù…ØªØ­Ø§Ù†Ø§ØªÙƒ Ø§Ù„Ù‚Ø§Ø¯Ù…Ø©:<br>' +
+                    upcomingExams.map(function(e) { return 'â€¢ ' + escapeHtml(e.name) + ' - ' + escapeHtml(e.subject) + ' (' + formatDate(e.date) + ')'; }).join('<br>');
             }
-            return t.ai_resp_no_exams;
+            return 'Ù„Ø§ ØªÙˆØ¬Ø¯ Ø§Ù…ØªØ­Ø§Ù†Ø§Øª Ù‚Ø§Ø¯Ù…Ø©.';
         }
-        if (lowerMsg.includes('نصيحة') || lowerMsg.includes('اقتراح') || lowerMsg.includes('تحليل')) {
+        if (lowerMsg.includes('Ù†ØµÙŠØ­Ø©') || lowerMsg.includes('Ø§Ù‚ØªØ±Ø§Ø­') || lowerMsg.includes('ØªØ­Ù„ÙŠÙ„')) {
             const tips = [];
-            if (gamification.streak >= 3) tips.push(t.ai_resp_tip_streak + gamification.streak + t.ai_resp_tip_streak2);
-            if (pomodoro.todayStats.completedSessions < 3) tips.push(t.ai_resp_tip_pomo);
+            if (gamification.streak >= 3) tips.push('Ø£Ù†Øª ÙÙŠ Ø³Ù„Ø³Ù„Ø© Ù†Ø´Ø§Ø· Ø¬ÙŠØ¯Ø© Ù…Ù†Ø° ' + gamification.streak + ' Ø£ÙŠØ§Ù…! Ø§Ø³ØªÙ…Ø±.');
+            if (pomodoro.todayStats.completedSessions < 3) tips.push('Ø­Ø§ÙˆÙ„ Ø¥ÙƒÙ…Ø§Ù„ 3 Ø¬ÙˆÙ„Ø§Øª Ø¨ÙˆÙ…ÙˆØ¯ÙˆØ±Ùˆ Ø¹Ù„Ù‰ Ø§Ù„Ø£Ù‚Ù„ Ø§Ù„ÙŠÙˆÙ….');
             const pendingHw = homework.filter(function(h) { return !h.completed; }).length;
-            if (pendingHw > 3) tips.push(t.ai_resp_tip_hw + pendingHw + t.ai_resp_tip_hw2);
-            if (tips.length === 0) tips.push(t.ai_resp_tip_start);
-            return t.ai_resp_tips + '<br>' + tips.map(function(tip) { return '• ' + tip; }).join('<br>');
+            if (pendingHw > 3) tips.push('Ù„Ø¯ÙŠÙƒ ' + pendingHw + ' ÙˆØ§Ø¬Ø¨Ø§Øª Ù…Ø¹Ù„Ù‚Ø©. Ø±ØªØ¨Ù‡Ø§ Ø­Ø³Ø¨ Ø§Ù„Ø£ÙˆÙ„ÙˆÙŠØ©.');
+            if (tips.length === 0) tips.push('Ø¨Ø¯Ø§ÙŠØ© ÙŠÙˆÙ…Ùƒ Ø¬ÙŠØ¯Ø©! Ø­Ø§ÙˆÙ„ Ø¥Ù†Ø´Ø§Ø¡ Ø¬Ø¯ÙˆÙ„ ÙŠÙˆÙ…ÙŠ Ù…Ù†Ø¸Ù….');
+            return 'ðŸ’¡ Ù†ØµØ§Ø¦Ø­ÙŠ Ù„Ùƒ:<br>' + tips.map(function(t) { return 'â€¢ ' + t; }).join('<br>');
         }
-        if (lowerMsg.includes('تتبع') || lowerMsg.includes('بلوك') || lowerMsg.includes('وقت')) {
+        if (lowerMsg.includes('ØªØªØ¨Ø¹') || lowerMsg.includes('Ø¨Ù„ÙˆÙƒ') || lowerMsg.includes('ÙˆÙ‚Øª')) {
             navigateTo('tasktracking');
-            return t.ai_resp_tracking;
+            return 'ØªÙ… Ø§Ù„Ø§Ù†ØªÙ‚Ø§Ù„ Ù„ØµÙØ­Ø© ØªØªØ¨Ø¹ Ø§Ù„Ù…Ù‡Ø§Ù…. ÙŠÙ…ÙƒÙ†Ùƒ Ù‡Ù†Ø§Ùƒ Ø¥Ø¶Ø§ÙØ© Ø¨Ù„ÙˆÙƒØ§Øª ÙˆÙ‚Øª Ù…Ø®ØµØµØ© Ù„Ù„Ù…Ø°Ø§ÙƒØ±Ø© ÙˆØ§Ù„Ù…Ø±Ø§Ø¬Ø¹Ø©.';
         }
-        if (lowerMsg.includes('إنجاز') || lowerMsg.includes('نقاط') || lowerMsg.includes('نiveau')) {
-            return '📊 ' + t.ai_resp_stats + ':<br>• ' + t.nav_achievements + ': ' + gamification.level + '<br>• ' + t.points_label + ': ' + gamification.points + '<br>• ' + t.tracking_streak + ': ' + gamification.streak + '<br>• ' + t.stat_completed + ': ' + gamification.totalCompletedHW;
+        if (lowerMsg.includes('Ø¥Ù†Ø¬Ø§Ø²') || lowerMsg.includes('Ù†Ù‚Ø§Ø·') || lowerMsg.includes('Ù†iveau')) {
+            return 'ðŸ“Š Ø¥Ø­ØµØ§Ø¦ÙŠØ§ØªÙƒ:<br>â€¢ Ø§Ù„Ù…Ø³ØªÙˆÙ‰: ' + gamification.level + '<br>â€¢ Ø§Ù„Ù†Ù‚Ø§Ø·: ' + gamification.points + '<br>â€¢ Ø§Ù„Ø³Ù„Ø³Ù„Ø©: ' + gamification.streak + ' Ø£ÙŠØ§Ù…<br>â€¢ Ø§Ù„ÙˆØ§Ø¬Ø¨Ø§Øª Ø§Ù„Ù…ÙƒØªÙ…Ù„Ø©: ' + gamification.totalCompletedHW;
         }
-        if (lowerMsg.includes('تصدير') || lowerMsg.includes('نسخ') || lowerMsg.includes('احتياطي')) {
+        if (lowerMsg.includes('ØªØµØ¯ÙŠØ±') || lowerMsg.includes('Ù†Ø³Ø®') || lowerMsg.includes('Ø§Ø­ØªÙŠØ§Ø·ÙŠ')) {
             navigateTo('settings');
-            return t.ai_resp_export;
+            return 'ØªÙ… Ø§Ù„Ø§Ù†ØªÙ‚Ø§Ù„ Ù„Ù„Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª. ÙŠÙ…ÙƒÙ†Ùƒ ØªØµØ¯ÙŠØ± Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ù…Ù† Ù‚Ø³Ù… "Ø§Ù„Ù†Ø³Ø® Ø§Ù„Ø§Ø­ØªÙŠØ§Ø·ÙŠ".';
         }
-        return t.ai_resp_default;
+        return 'Ø£Ù†Ø§ Ù‡Ù†Ø§ Ù„Ù…Ø³Ø§Ø¹Ø¯ØªÙƒ ÙÙŠ ØªÙ†Ø¸ÙŠÙ… Ø§Ù„ÙŠÙˆÙ…! ÙŠÙ…ÙƒÙ†Ù†ÙŠ:<br>â€¢ Ø¥Ù†Ø´Ø§Ø¡ Ø¬Ø¯ÙˆÙ„ ÙŠÙˆÙ…ÙŠ<br>â€¢ Ø¹Ø±Ø¶ Ø§Ù„ÙˆØ§Ø¬Ø¨Ø§Øª ÙˆØ§Ù„Ø§Ù…ØªØ­Ø§Ù†Ø§Øª<br>â€¢ Ù†ØµØ§Ø¦Ø­ Ù„Ù„Ø¯Ø±Ø§Ø³Ø©<br>â€¢ ØªØªØ¨Ø¹ Ù†Ø´Ø§Ø·Ùƒ<br>â€¢ ØªØµØ¯ÙŠØ± Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª<br>Ø¬Ø±Ù‘Ø¨ Ø£Ø³Ø£Ù„Ù†ÙŠ Ø¹Ù† Ø£ÙŠ Ø´ÙŠØ¡!';
     }
 
 })();

@@ -3,61 +3,648 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src 'self';">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    <meta name="referrer" content="no-referrer">
-    <title>العودة للجامعة - تسجيل الدخول</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com;">
+    <title>العودة للمدرسة</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        .home-page {
+            min-height: 100vh;
+            background: var(--bg-dark);
+        }
+
+        /* Navbar */
+        .home-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(10, 10, 26, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 1000;
+        }
+
+        .home-nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .home-nav-brand .brand-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            margin: 0;
+        }
+
+        .home-nav-brand span {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .home-nav-links {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .home-nav-links a {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .home-nav-links a:hover {
+            color: var(--text-primary);
+            background: var(--bg-hover);
+        }
+
+        .home-nav-links .btn-nav-login {
+            background: var(--bg-input);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .home-nav-links .btn-nav-login:hover {
+            border-color: var(--primary);
+        }
+
+        .home-nav-links .btn-nav-signup {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .home-nav-links .btn-nav-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.4);
+        }
+
+        .home-nav-links .btn-nav-parent {
+            background: rgba(0, 206, 201, 0.1);
+            border: 1px solid rgba(0, 206, 201, 0.3);
+            color: var(--success);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .home-nav-links .btn-nav-parent:hover {
+            background: rgba(0, 206, 201, 0.2);
+            border-color: var(--success);
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 40px 60px;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, #12122a 50%, var(--bg-dark) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            right: -200px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(108, 92, 231, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -150px;
+            left: -150px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 206, 201, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(108, 92, 231, 0.15);
+            border: 1px solid rgba(108, 92, 231, 0.3);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 13px;
+            color: var(--primary-light);
+            margin-bottom: 30px;
+        }
+
+        .hero-badge i {
+            font-size: 14px;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+
+        .hero-buttons .btn {
+            padding: 16px 36px;
+            font-size: 16px;
+            border-radius: 14px;
+        }
+
+        .hero-stats {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 50px;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-num {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary-light);
+        }
+
+        .hero-stat-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Features */
+        .features-section {
+            padding: 100px 40px;
+            background: var(--bg-dark);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .section-header p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 35px 30px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px var(--shadow-color);
+            border-color: var(--primary);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon.purple { background: rgba(108, 92, 231, 0.15); color: var(--primary-light); }
+        .feature-icon.teal { background: rgba(0, 206, 201, 0.15); color: var(--secondary); }
+        .feature-icon.pink { background: rgba(253, 121, 168, 0.15); color: var(--accent); }
+        .feature-icon.green { background: rgba(0, 184, 148, 0.15); color: var(--success); }
+        .feature-icon.blue { background: rgba(116, 185, 255, 0.15); color: var(--info); }
+        .feature-icon.yellow { background: rgba(253, 203, 110, 0.15); color: var(--warning); }
+
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* How it works */
+        .how-section {
+            padding: 100px 40px;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, #12122a 100%);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .step-card {
+            text-align: center;
+            padding: 30px 20px;
+            position: relative;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+            color: white;
+            margin: 0 auto 20px;
+        }
+
+        .step-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .step-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 40px;
+            background: var(--bg-dark);
+        }
+
+        .cta-card {
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 50%, #3d2a8a 100%);
+            border-radius: var(--radius-xl);
+            padding: 60px 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .cta-card h2 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .cta-card p {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .cta-card .btn {
+            padding: 16px 40px;
+            font-size: 16px;
+            border-radius: 14px;
+            background: white;
+            color: var(--primary-dark);
+            font-weight: 700;
+            position: relative;
+        }
+
+        .cta-card .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer */
+        .home-footer {
+            padding: 40px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .home-nav {
+                padding: 0 20px;
+            }
+
+            .home-nav-links a:not(.btn-nav-signup):not(.btn-nav-login):not(.btn-nav-parent) {
+                display: none;
+            }
+
+            .lang-toggle-home {
+                display: none;
+            }
+
+            .hero {
+                padding: 100px 20px 60px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .hero-buttons .btn {
+                width: 100%;
+            }
+
+            .hero-stats {
+                gap: 25px;
+            }
+
+            .hero-stat-num {
+                font-size: 24px;
+            }
+
+            .features-section,
+            .how-section,
+            .cta-section {
+                padding: 60px 20px;
+            }
+
+            .section-header h2 {
+                font-size: 26px;
+            }
+
+            .cta-card {
+                padding: 40px 25px;
+            }
+
+            .cta-card h2 {
+                font-size: 24px;
+            }
+        }
+
+        .lang-toggle-home {
+            background: var(--bg-input);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .lang-toggle-home:hover {
+            border-color: var(--primary);
+            color: var(--primary-light);
+        }
+    </style>
 </head>
-<body class="auth-page">
-    <div class="auth-wrapper">
-        <div class="auth-left">
-            <div class="auth-brand">
-                <div class="brand-icon"><i class="fas fa-graduation-cap"></i></div>
-                <h1>العودة للجامعة</h1>
-                <p>مساعدك الذكي لتنظيم حياتك الجامعية</p>
-            </div>
-            <div class="auth-features">
-                <div class="feature-item"><i class="fas fa-check-circle"></i><span>تنظيم الواجبات والامتحانات</span></div>
-                <div class="feature-item"><i class="fas fa-check-circle"></i><span>مساعد ذكي للتخطيط اليومي</span></div>
-                <div class="feature-item"><i class="fas fa-check-circle"></i><span>جدولة التمارين والأنشطة</span></div>
-                <div class="feature-item"><i class="fas fa-check-circle"></i><span>تقويم ذكي للمهام</span></div>
-            </div>
+<body class="home-page">
+    <!-- Navbar -->
+    <nav class="home-nav">
+        <div class="home-nav-brand">
+            <div class="brand-icon"><i class="fas fa-graduation-cap"></i></div>
+            <span data-i18n="app_name">العودة للمدرسة</span>
         </div>
-        <div class="auth-right">
-            <div class="auth-container">
-                <div class="auth-header">
-                    <div class="mobile-brand"><i class="fas fa-graduation-cap"></i> العودة للجامعة</div>
-                    <h2>مرحباً بعودتك!</h2>
-                    <p>سجّل دخولك للمتابعة</p>
+        <div class="home-nav-links">
+            <a href="#features" data-i18n="nav_features">المميزات</a>
+            <a href="#how" data-i18n="nav_how">كيف يعمل</a>
+            <a href="parent.html" class="btn-nav-parent"><i class="fas fa-users"></i> <span data-i18n="parent_login">لوحة الوالدين</span></a>
+            <button class="lang-toggle-home" id="langToggle" title="Switch Language"><i class="fas fa-globe"></i> <span id="langLabel">EN</span></button>
+            <a href="login.html" class="btn-nav-login" data-i18n="nav_login">تسجيل الدخول</a>
+            <a href="signup.html" class="btn-nav-signup" data-i18n="nav_signup">ابدأ الآن</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge"><i class="fas fa-rocket"></i> <span data-i18n="hero_badge">مساعدك الذكي للعودة للمدرسة</span></div>
+            <h1 data-i18n="hero_title">نظّم حياتك المدرسية<br>بـ<span class="highlight">ذكاء وسهولة</span></h1>
+            <p data-i18n="hero_desc">تطبيق شامل يساعدك على إدارة واجباتك وامتحاناتك، إنشاء جداول ذكية، ومتابعة تقدمك الدراسي كل يوم</p>
+            <div class="hero-buttons">
+                <a href="signup.html" class="btn btn-primary"><i class="fas fa-user-plus"></i> <span data-i18n="hero_signup">أنشئ حساباً مجانياً</span></a>
+                <a href="login.html" class="btn btn-secondary"><i class="fas fa-sign-in-alt"></i> <span data-i18n="hero_login">تسجيل الدخول</span></a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-num">+10</div>
+                    <div class="hero-stat-label" data-i18n="stat_features">ميزة ذكية</div>
                 </div>
-                <form id="loginForm" class="auth-form">
-                    <div class="form-group">
-                        <label for="email"><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
-                        <input type="email" id="email" required placeholder="example@email.com" autocomplete="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="password"><i class="fas fa-lock"></i> كلمة المرور</label>
-                        <div class="password-input-wrapper">
-                            <input type="password" id="password" required placeholder="••••••••" autocomplete="current-password">
-                            <button type="button" class="toggle-password" onclick="togglePassword('password', this)"><i class="fas fa-eye"></i></button>
-                        </div>
-                    </div>
-                    <div id="errorMessage" class="error-message"></div>
-                    <button type="submit" class="btn btn-primary btn-block">
-                        <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
-                    </button>
-                </form>
-                <div class="auth-footer">
-                    <p>ليس لديك حساب؟ <a href="signup.html">أنشئ حساباً جديداً</a></p>
+                <div class="hero-stat">
+                    <div class="hero-stat-num">24/7</div>
+                    <div class="hero-stat-label" data-i18n="stat_available">متاح دائماً</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-num">100%</div>
+                    <div class="hero-stat-label" data-i18n="stat_free">مجاني</div>
                 </div>
             </div>
         </div>
-    </div>
-    <script src="auth.js"></script>
+    </section>
+
+    <!-- Features -->
+    <section class="features-section" id="features">
+        <div class="section-header">
+            <h2 data-i18n="features_title">مميزات تجعل حياتك أسهل</h2>
+            <p data-i18n="features_desc">كل ما تحتاجه لإدارة حياتك المدرسية في مكان واحد</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon purple"><i class="fas fa-magic"></i></div>
+                <h3 data-i18n="feature1_title">جدول يومي ذكي</h3>
+                <p data-i18n="feature1_desc">إنشاء تلقائي لجدول يومك بناءً على وقت استيقاظك ومواعيد الدوام والأنشطة</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon teal"><i class="fas fa-book"></i></div>
+                <h3 data-i18n="feature2_title">إدارة الواجبات</h3>
+                <p data-i18n="feature2_desc">تتبع واجباتك المدرسية مع إشعارات ذكية وتذكيرات قبل الموعد النهائية</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon pink"><i class="fas fa-file-alt"></i></div>
+                <h3 data-i18n="feature3_title">إدارة الامتحانات</h3>
+                <p data-i18n="feature3_desc">سجّل امتحاناتك القادمة واحصل على تنبيهات قبل الامتحان بأيام</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon green"><i class="fas fa-clock"></i></div>
+                <h3 data-i18n="feature4_title">مؤقت بومودورو</h3>
+                <p data-i18n="feature4_desc">مؤقت مذاكرة متقدم لتحسين تركيزك وزيادة إنتاجيتك</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon blue"><i class="fas fa-robot"></i></div>
+                <h3 data-i18n="feature5_title">مساعد ذكي</h3>
+                <p data-i18n="feature5_desc">مساعد مدعوم بالذكاء الاصطناعي يقترح لك أفضل جدول وأوقات المذاكرة</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon yellow"><i class="fas fa-trophy"></i></div>
+                <h3 data-i18n="feature6_title">إنجازات ونقاط</h3>
+                <p data-i18n="feature6_desc">اكسب نقاطاً وشارات مع كل مهمة تكتمل لتشجيعك على الاستمرار</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="how-section" id="how">
+        <div class="section-header">
+            <h2 data-i18n="how_title">كيف يعمل؟</h2>
+            <p data-i18n="how_desc">ثلاث خطوات بسيطة للبدء</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h3 data-i18n="step1_title">أنشئ حسابك</h3>
+                <p data-i18n="step1_desc">سجّل حساباً مجانياً في ثوانٍ بإدخال بريدك الإلكتروني وكلمة المرور</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h3 data-i18n="step2_title">أضف بياناتك</h3>
+                <p data-i18n="step2_desc">أدخل موادك ومواعيد دوامك ووقت استيقاظك لإنشاء جدولك المخصص</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h3 data-i18n="step3_title">ابدأ مذاكرتك</h3>
+                <p data-i18n="step3_desc">اتبع جدولك الذكي وتابع تقدمك واحصل على إنجازاتك</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="cta-card">
+            <h2 data-i18n="cta_title">جاهز للبدء؟</h2>
+            <p data-i18n="cta_desc">انضم الآن واجعل عامك المدرسي الأفضل</p>
+            <a href="signup.html" class="btn"><i class="fas fa-rocket"></i> <span data-i18n="cta_btn">أنشئ حسابك مجاناً</span></a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="home-footer">
+        <p>&copy; 2026 <span data-i18n="app_name">العودة للمدرسة</span>. جميع الحقوق محفوظة.</p>
+    </footer>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="i18n.js"></script>
 </body>
 </html>

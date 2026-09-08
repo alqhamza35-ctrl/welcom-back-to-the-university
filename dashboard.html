@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://fcmregistrations.googleapis.com https://fcm.googleapis.com; worker-src 'self';">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <meta name="referrer" content="no-referrer">
-    <title>العودة للجامعة - لوحة التحكم</title>
+    <title>العودة للمدرسة - لوحة التحكم</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
@@ -20,7 +19,7 @@
             <div class="sidebar-header">
                 <div class="brand">
                     <div class="brand-icon"><i class="fas fa-graduation-cap"></i></div>
-                    <span class="brand-text">العودة للجامعة</span>
+                    <span class="brand-text" data-i18n="app_name">العودة للمدرسة</span>
                 </div>
                 <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
             </div>
@@ -34,36 +33,40 @@
             </div>
 
             <nav class="sidebar-nav">
-                <a href="#" class="nav-item active" data-page="dashboard"><i class="fas fa-th-large"></i><span>لوحة التحكم</span></a>
-                <a href="#" class="nav-item" data-page="classes"><i class="fas fa-book-reader"></i><span>محاضرات اليوم</span></a>
-                <a href="#" class="nav-item" data-page="homework"><i class="fas fa-book"></i><span>الواجبات</span></a>
-                <a href="#" class="nav-item" data-page="exams"><i class="fas fa-file-alt"></i><span>الامتحانات</span></a>
-                <a href="#" class="nav-item" data-page="schedule"><i class="fas fa-calendar-day"></i><span>الجدول اليومي</span></a>
-                <a href="#" class="nav-item" data-page="calendar"><i class="fas fa-calendar"></i><span>التقويم</span></a>
-                <a href="#" class="nav-item" data-page="settings"><i class="fas fa-cog"></i><span>الإعدادات</span></a>
+                <a href="#" class="nav-item active" data-page="dashboard"><i class="fas fa-th-large"></i><span data-i18n="nav_dashboard">لوحة التحكم</span></a>
+                <a href="#" class="nav-item" data-page="classes"><i class="fas fa-book-reader"></i><span data-i18n="nav_classes">مواد اليوم</span></a>
+                <a href="#" class="nav-item" data-page="homework"><i class="fas fa-book"></i><span data-i18n="nav_homework">الواجبات</span></a>
+                <a href="#" class="nav-item" data-page="exams"><i class="fas fa-file-alt"></i><span data-i18n="nav_exams">الامتحانات</span></a>
+                <a href="#" class="nav-item" data-page="schedule"><i class="fas fa-calendar-day"></i><span data-i18n="nav_schedule">الجدول اليومي</span></a>
+                <a href="#" class="nav-item" data-page="calendar"><i class="fas fa-calendar"></i><span data-i18n="nav_calendar">التقويم</span></a>
+                <a href="#" class="nav-item" data-page="pomodoro"><i class="fas fa-clock"></i><span data-i18n="nav_pomodoro">مؤقت المذاكرة</span></a>
+                <a href="#" class="nav-item" data-page="achievements"><i class="fas fa-trophy"></i><span data-i18n="nav_achievements">الإنجازات</span></a>
+                <a href="#" class="nav-item" data-page="parent"><i class="fas fa-users"></i><span data-i18n="nav_parent">لوحة الوالدين</span></a>
+                <a href="#" class="nav-item" data-page="tasktracking"><i class="fas fa-tasks"></i><span data-i18n="nav_tasktracking">تتبع المهام</span></a>
+                <a href="#" class="nav-item" data-page="settings"><i class="fas fa-cog"></i><span data-i18n="nav_settings">الإعدادات</span></a>
             </nav>
 
             <div class="sidebar-conversations">
                 <div class="conversations-header">
-                    <h3><i class="fas fa-comments"></i> المحادثات</h3>
+                    <h3><i class="fas fa-comments"></i> <span data-i18n="conversations">المحادثات</span></h3>
                     <button class="btn-icon" id="newChatBtn" title="محادثة جديدة"><i class="fas fa-plus"></i></button>
                 </div>
                 <div class="conversations-list" id="conversationsList">
-                    <div class="conversation-empty">لا توجد محادثات بعد</div>
+                    <div class="conversation-empty" data-i18n="no_conversations">لا توجد محادثات بعد</div>
                 </div>
             </div>
 
             <div class="sidebar-schedule">
                 <div class="schedule-header">
-                    <h3><i class="fas fa-clock"></i> جدول اليوم</h3>
+                    <h3><i class="fas fa-clock"></i> <span data-i18n="daily_schedule">جدول اليوم</span></h3>
                 </div>
                 <div class="daily-schedule-preview" id="dailySchedulePreview">
-                    <div class="schedule-empty">لم يتم إنشاء الجدول بعد</div>
+                    <div class="schedule-empty" data-i18n="no_schedule_yet">لم يتم إنشاء الجدول بعد</div>
                 </div>
             </div>
 
             <div class="sidebar-footer">
-                <button class="btn btn-logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></button>
+                <button class="btn btn-logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i><span data-i18n="logout">تسجيل الخروج</span></button>
             </div>
         </aside>
 
@@ -74,11 +77,13 @@
                 <div class="top-nav-right">
                     <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
                     <div class="page-title" id="pageTitle">
-                        <h1>لوحة التحكم</h1>
-                        <p>مرحباً بك اليوم</p>
+                        <h1 data-i18n="page_dashboard">لوحة التحكم</h1>
+                        <p data-i18n="welcome_today">مرحباً بك اليوم</p>
                     </div>
                 </div>
                 <div class="top-nav-left">
+                    <button class="lang-toggle" id="langToggle" title="Switch Language"><i class="fas fa-globe"></i> <span id="langLabel">EN</span></button>
+                    <button class="theme-toggle" id="themeToggle" title="تبديل السمة"><i class="fas fa-moon"></i><i class="fas fa-sun"></i></button>
                     <div class="wake-time-input">
                         <label><i class="fas fa-sun"></i> وقت الاستيقاظ:</label>
                         <input type="time" id="wakeUpTime" value="06:00">
@@ -103,35 +108,35 @@
                             <div class="stat-icon"><i class="fas fa-book"></i></div>
                             <div class="stat-info">
                                 <span class="stat-number" id="statHomework">0</span>
-                                <span class="stat-label">واجب مستحق</span>
+                                <span class="stat-label" data-i18n="stat_homework">واجب مستحق</span>
                             </div>
                         </div>
                         <div class="stat-card stat-exams">
                             <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
                             <div class="stat-info">
                                 <span class="stat-number" id="statExams">0</span>
-                                <span class="stat-label">امتحان قادم</span>
+                                <span class="stat-label" data-i18n="stat_exams">امتحان قادم</span>
                             </div>
                         </div>
                         <div class="stat-card stat-completed">
                             <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
                             <div class="stat-info">
                                 <span class="stat-number" id="statCompleted">0</span>
-                                <span class="stat-label">مهمة مكتملة</span>
+                                <span class="stat-label" data-i18n="stat_completed">مهمة مكتملة</span>
                             </div>
                         </div>
                         <div class="stat-card stat-pending">
                             <div class="stat-icon"><i class="fas fa-hourglass-half"></i></div>
                             <div class="stat-info">
                                 <span class="stat-number" id="statPending">0</span>
-                                <span class="stat-label">مهمة معلقة</span>
+                                <span class="stat-label" data-i18n="stat_pending">مهمة معلقة</span>
                             </div>
                         </div>
                         <div class="stat-card stat-classes">
                             <div class="stat-icon"><i class="fas fa-chalkboard-teacher"></i></div>
                             <div class="stat-info">
                                 <span class="stat-number" id="statClasses">0</span>
-                                <span class="stat-label">محاضرة اليوم</span>
+                                <span class="stat-label" data-i18n="stat_classes">مادة اليوم</span>
                             </div>
                         </div>
                     </div>
@@ -141,30 +146,40 @@
                         <div class="ai-chat-header">
                             <div class="ai-avatar"><i class="fas fa-robot"></i></div>
                             <div class="ai-info">
-                                <h3>مساعد التخطيط الذكي</h3>
-                                <p>دعني أساعدك في تنظيم يومك</p>
+                                <h3 data-i18n="ai_title">مساعد التخطيط الذكي</h3>
+                                <p data-i18n="ai_subtitle">دعني أساعدك في تنظيم يومك</p>
                             </div>
-                            <button class="btn btn-generate" id="generateScheduleBtn">
-                                <i class="fas fa-magic"></i> إنشاء الجدول
-                            </button>
+                            <div class="ai-header-actions">
+                                <button class="btn btn-generate" id="generateScheduleBtn">
+                                    <i class="fas fa-magic"></i> <span data-i18n="btn_generate_schedule">إنشاء الجدول</span>
+                                </button>
+                                <div class="ai-menu-wrapper">
+                                    <button class="btn-icon ai-menu-btn" id="aiMenuBtn"><i class="fas fa-ellipsis-v"></i></button>
+                                    <div class="ai-dropdown-menu" id="aiDropdownMenu">
+                                        <button class="ai-dropdown-item" id="aiClearChat"><i class="fas fa-trash"></i> <span data-i18n="ai_clear_chat">مسح المحادثة</span></button>
+                                        <button class="ai-dropdown-item" id="aiExportChat"><i class="fas fa-download"></i> <span data-i18n="ai_export_chat">تصدير المحادثة</span></button>
+                                        <button class="ai-dropdown-item" id="aiShowTips"><i class="fas fa-lightbulb"></i> <span data-i18n="ai_show_tips">نصائح الدراسة</span></button>
+                                        <button class="ai-dropdown-item" id="aiShowStats"><i class="fas fa-chart-bar"></i> <span data-i18n="ai_show_stats">إحصائياتي</span></button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="ai-chat-messages" id="chatMessages">
                             <div class="message assistant">
                                 <div class="message-avatar"><i class="fas fa-robot"></i></div>
                                 <div class="message-content">
-                                    <p>مرحباً! أنا مساعدك الذكي للتخطيط اليومي. يمكنني مساعدتك في:</p>
+                                    <p data-i18n="ai_welcome">مرحباً! أنا مساعدك الذكي. كيف يمكنني مساعدتك اليوم?</p>
                                     <ul>
-                                        <li>تنظيم جدول يومك بناءً على وقت استيقاظك</li>
-                                        <li>جدولة الواجبات والامتحانات</li>
-                                        <li>تخصيص أوقات للتمارين والراحة</li>
-                                        <li>اقتراح أوقات النوم والاستيقاظ المثالية</li>
+                                        <li data-i18n="ai_help_schedule">إنشاء جدول يومي</li>
+                                        <li data-i18n="ai_help_hw">عرض الواجبات والامتحانات</li>
+                                        <li data-i18n="ai_help_tips">نصائح للدراسة</li>
                                     </ul>
-                                    <p>أدخل وقت استيقاظك في الأعلى واضغط "إنشاء الجدول" للبدء!</p>
+                                    <p data-i18n="ai_prompt">اكتب رسالتك هنا!</p>
                                 </div>
                             </div>
                         </div>
                         <div class="ai-chat-input">
-                            <input type="text" id="chatInput" placeholder="اكتب رسالتك هنا..." class="chat-input-field">
+                            <input type="text" id="chatInput" placeholder="اكتب رسالتك هنا..." class="chat-input-field" data-i18n-placeholder="ai_prompt">
                             <button class="btn btn-send" id="sendChatBtn"><i class="fas fa-paper-plane"></i></button>
                         </div>
                     </div>
@@ -173,24 +188,24 @@
                 <!-- Daily Subjects Page -->
                 <div class="page" id="page-classes">
                     <div class="page-header">
-                        <h2><i class="fas fa-book-reader"></i> محاضرات اليوم</h2>
-                        <button class="btn btn-primary" id="addClassBtn"><i class="fas fa-plus"></i> إضافة مادة</button>
+                        <h2><i class="fas fa-book-reader"></i> <span data-i18n="page_classes">مواد اليوم</span></h2>
+                        <button class="btn btn-primary" id="addClassBtn"><i class="fas fa-plus"></i> <span data-i18n="btn_add_class">إضافة مادة</span></button>
                     </div>
                     <div class="subjects-summary" id="subjectsSummary">
                         <div class="summary-card">
                             <i class="fas fa-clock"></i>
-                            <span>وقت المذاكرة المقدر: <strong id="estimatedStudyTime">0</strong> دقيقة</span>
+                            <span><span data-i18n="estimated_study">وقت المذاكرة المقدر:</span> <strong id="estimatedStudyTime">0</strong> <span data-i18n="minutes">دقيقة</span></span>
                         </div>
                         <div class="summary-card">
                             <i class="fas fa-book"></i>
-                            <span>عدد المواد: <strong id="subjectsCount">0</strong></span>
+                            <span><span data-i18n="subjects_count">عدد المواد:</span> <strong id="subjectsCount">0</strong></span>
                         </div>
                     </div>
                     <div class="classes-grid" id="classesGrid">
                         <div class="empty-state">
                             <i class="fas fa-book-reader"></i>
-                            <h3>لم تضف مواد اليوم بعد</h3>
-                            <p>أضف المواد التي درستها اليوم لتظهر في جدول المذاكرة</p>
+                            <h3 data-i18n="no_classes">لم تضف مواد اليوم بعد</h3>
+                            <p data-i18n="no_classes_desc">أضف المواد التي درستها اليوم لتظهر في جدول المذاكرة</p>
                         </div>
                     </div>
                 </div>
@@ -198,20 +213,20 @@
                 <!-- Homework Page -->
                 <div class="page" id="page-homework">
                     <div class="page-header">
-                        <h2><i class="fas fa-book"></i> إدارة الواجبات</h2>
-                        <button class="btn btn-primary" id="addHomeworkBtn"><i class="fas fa-plus"></i> إضافة واجب</button>
+                        <h2><i class="fas fa-book"></i> <span data-i18n="page_homework">إدارة الواجبات</span></h2>
+                        <button class="btn btn-primary" id="addHomeworkBtn"><i class="fas fa-plus"></i> <span data-i18n="btn_add_homework">إضافة واجب</span></button>
                     </div>
                     <div class="homework-filters">
-                        <button class="filter-btn active" data-filter="all">الكل</button>
-                        <button class="filter-btn" data-filter="today">اليوم</button>
-                        <button class="filter-btn" data-filter="upcoming">القادم</button>
-                        <button class="filter-btn" data-filter="completed">مكتمل</button>
+                        <button class="filter-btn active" data-filter="all" data-i18n="filter_all">الكل</button>
+                        <button class="filter-btn" data-filter="today" data-i18n="filter_today">اليوم</button>
+                        <button class="filter-btn" data-filter="upcoming" data-i18n="filter_upcoming">القادم</button>
+                        <button class="filter-btn" data-filter="completed" data-i18n="filter_completed">مكتمل</button>
                     </div>
                     <div class="homework-list" id="homeworkList">
                         <div class="empty-state">
                             <i class="fas fa-book-open"></i>
-                            <h3>لا توجد واجبات</h3>
-                            <p>ابدأ بإضافة واجباتك هنا</p>
+                            <h3 data-i18n="no_hw">لا توجد واجبات</h3>
+                            <p data-i18n="no_hw_desc">ابدأ بإضافة واجباتك هنا</p>
                         </div>
                     </div>
                 </div>
@@ -219,20 +234,20 @@
                 <!-- Exams Page -->
                 <div class="page" id="page-exams">
                     <div class="page-header">
-                        <h2><i class="fas fa-file-alt"></i> إدارة الامتحانات</h2>
-                        <button class="btn btn-primary" id="addExamBtn"><i class="fas fa-plus"></i> إضافة امتحان</button>
+                        <h2><i class="fas fa-file-alt"></i> <span data-i18n="page_exams">إدارة الامتحانات</span></h2>
+                        <button class="btn btn-primary" id="addExamBtn"><i class="fas fa-plus"></i> <span data-i18n="btn_add_exam">إضافة امتحان</span></button>
                     </div>
                     <div class="exams-tomorrow" id="examsTomorrow">
-                        <h3><i class="fas fa-exclamation-triangle"></i> امتحانات غداً</h3>
+                        <h3><i class="fas fa-exclamation-triangle"></i> <span data-i18n="exams_tomorrow">امتحانات غداً</span></h3>
                         <div class="exams-tomorrow-list" id="examsTomorrowList">
-                            <div class="empty-state-sm">لا توجد امتحانات غداً</div>
+                            <div class="empty-state-sm" data-i18n="no_exams_tomorrow">لا توجد امتحانات غداً</div>
                         </div>
                     </div>
                     <div class="exams-list" id="examsList">
                         <div class="empty-state">
                             <i class="fas fa-file-alt"></i>
-                            <h3>لا توجد امتحانات</h3>
-                            <p>أضف امتحاناتك القادمة هنا</p>
+                            <h3 data-i18n="no_exams">لا توجد امتحانات</h3>
+                            <p data-i18n="no_exams_desc">أضف امتحاناتك القادمة هنا</p>
                         </div>
                     </div>
                 </div>
@@ -240,47 +255,47 @@
                 <!-- Schedule Page -->
                 <div class="page" id="page-schedule">
                     <div class="page-header">
-                        <h2><i class="fas fa-calendar-day"></i> الجدول اليومي الذكي</h2>
-                        <button class="btn btn-generate" id="generateScheduleBtn2"><i class="fas fa-magic"></i> إعادة إنشاء الجدول</button>
+                        <h2><i class="fas fa-calendar-day"></i> <span data-i18n="page_schedule">الجدول اليومي الذكي</span></h2>
+                        <button class="btn btn-generate" id="generateScheduleBtn2"><i class="fas fa-magic"></i> <span data-i18n="btn_regenerate">إعادة إنشاء الجدول</span></button>
                     </div>
                     <div class="schedule-config">
                         <div class="config-card">
-                            <h3>إعدادات اليوم</h3>
+                            <h3 data-i18n="schedule_settings">إعدادات اليوم</h3>
                             <div class="config-grid">
                                 <div class="config-item">
-                                    <label><i class="fas fa-university"></i> بداية المحاضرات</label>
-                                    <input type="time" id="schoolStart" value="08:00">
+                                    <label><i class="fas fa-school"></i> <span data-i18n="schedule_school_start">بداية الدوام</span></label>
+                                    <input type="time" id="schoolStart" value="07:30">
                                 </div>
                                 <div class="config-item">
-                                    <label><i class="fas fa-university"></i> نهاية المحاضرات</label>
-                                    <input type="time" id="schoolEnd" value="15:00">
+                                    <label><i class="fas fa-school"></i> <span data-i18n="schedule_school_end">نهاية الدوام</span></label>
+                                    <input type="time" id="schoolEnd" value="14:00">
                                 </div>
                                 <div class="config-item">
-                                    <label><i class="fas fa-sun"></i> وقت الاستيقاظ</label>
+                                    <label><i class="fas fa-sun"></i> <span data-i18n="schedule_wake">وقت الاستيقاظ</span></label>
                                     <input type="time" id="scheduleWakeUp" value="06:00">
                                 </div>
                                 <div class="config-item">
-                                    <label><i class="fas fa-moon"></i> وقت النوم</label>
+                                    <label><i class="fas fa-moon"></i> <span data-i18n="schedule_sleep">وقت النوم</span></label>
                                     <input type="time" id="scheduleSleep" value="22:00">
                                 </div>
                                 <div class="config-item">
-                                    <label><i class="fas fa-utensils"></i> وجبة الإفطار</label>
+                                    <label><i class="fas fa-utensils"></i> <span data-i18n="schedule_breakfast">وجبة الإفطار</span></label>
                                     <input type="time" id="breakfastTime" value="06:30">
                                 </div>
                                 <div class="config-item">
-                                    <label><i class="fas fa-utensils"></i> وجبة الغداء</label>
-                                    <input type="time" id="lunchTime" value="13:00">
+                                    <label><i class="fas fa-utensils"></i> <span data-i18n="schedule_lunch">وجبة الغداء</span></label>
+                                    <input type="time" id="lunchTime" value="14:30">
                                 </div>
                                 <div class="config-item">
-                                    <label><i class="fas fa-utensils"></i> وجبة العشاء</label>
+                                    <label><i class="fas fa-utensils"></i> <span data-i18n="schedule_dinner">وجبة العشاء</span></label>
                                     <input type="time" id="dinnerTime" value="20:00">
                                 </div>
                                 <div class="config-item">
-                                    <label><i class="fas fa-dumbbell"></i> وقت التمرين</label>
+                                    <label><i class="fas fa-dumbbell"></i> <span data-i18n="schedule_exercise">وقت التمرين</span></label>
                                     <input type="time" id="exerciseTime" value="16:00">
                                 </div>
                                 <div class="config-item">
-                                    <label><i class="fas fa-shower"></i> وقت الاستحمام</label>
+                                    <label><i class="fas fa-shower"></i> <span data-i18n="schedule_shower">وقت الاستحمام</span></label>
                                     <input type="time" id="showerTime" value="21:00">
                                 </div>
                             </div>
@@ -289,8 +304,8 @@
                     <div class="schedule-timeline" id="scheduleTimeline">
                         <div class="empty-state">
                             <i class="fas fa-calendar-day"></i>
-                            <h3>لم يتم إنشاء الجدول بعد</h3>
-                            <p>اضغط "إنشاء الجدول" لإنشاء جدول يومك</p>
+                            <h3 data-i18n="no_schedule_yet">لم يتم إنشاء الجدول بعد</h3>
+                            <p data-i18n="btn_regenerate">اضغط "إنشاء الجدول" لإنشاء جدول يومك</p>
                         </div>
                     </div>
                 </div>
@@ -298,30 +313,275 @@
                 <!-- Calendar Page -->
                 <div class="page" id="page-calendar">
                     <div class="page-header">
-                        <h2><i class="fas fa-calendar"></i> التقويم</h2>
+                        <h2><i class="fas fa-calendar"></i> <span data-i18n="page_calendar">التقويم</span></h2>
                     </div>
                     <div class="calendar-container">
                         <div class="calendar-nav">
                             <button class="btn-icon" id="prevMonth"><i class="fas fa-chevron-right"></i></button>
-                            <h3 id="calendarTitle">يناير 2026</h3>
+                            <h3 id="calendarTitle">يناير 2025</h3>
                             <button class="btn-icon" id="nextMonth"><i class="fas fa-chevron-left"></i></button>
                         </div>
                         <div class="calendar-grid">
                             <div class="calendar-header">
-                                <div class="day-name">الأحد</div>
-                                <div class="day-name">الإثنين</div>
-                                <div class="day-name">الثلاثاء</div>
-                                <div class="day-name">الأربعاء</div>
-                                <div class="day-name">الخميس</div>
-                                <div class="day-name">الجمعة</div>
-                                <div class="day-name">السبت</div>
+                                <div class="day-name" data-i18n="day_sat">السبت</div>
+                                <div class="day-name" data-i18n="day_sun">الأحد</div>
+                                <div class="day-name" data-i18n="day_mon">الإثنين</div>
+                                <div class="day-name" data-i18n="day_tue">الثلاثاء</div>
+                                <div class="day-name" data-i18n="day_wed">الأربعاء</div>
+                                <div class="day-name" data-i18n="day_thu">الخميس</div>
+                                <div class="day-name" data-i18n="day_fri">الجمعة</div>
                             </div>
                             <div class="calendar-body" id="calendarBody"></div>
                         </div>
                         <div class="calendar-events" id="calendarEvents">
-                            <h3>أحداث اليوم</h3>
+                            <h3 data-i18n="today_events">أحداث اليوم</h3>
                             <div class="events-list" id="eventsList">
-                                <div class="empty-state-sm">لا توجد أحداث لهذا اليوم</div>
+                                <div class="empty-state-sm" data-i18n="no_events">لا توجد أحداث لهذا اليوم</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pomodoro Timer Page -->
+                <div class="page" id="page-pomodoro">
+                    <div class="page-header">
+                        <h2><i class="fas fa-clock"></i> <span data-i18n="page_pomodoro">مؤقت المذاكرة (بومودورو)</span></h2>
+                    </div>
+                    <div class="pomodoro-container">
+                        <div class="pomodoro-main">
+                            <div class="pomodoro-timer-card">
+                                <div class="pomodoro-mode-tabs">
+                                    <button class="pomo-tab active" data-mode="work" data-i18n="pomodoro_work">مذاكرة</button>
+                                    <button class="pomo-tab" data-mode="short" data-i18n="pomodoro_short">استراحة قصيرة</button>
+                                    <button class="pomo-tab" data-mode="long" data-i18n="pomodoro_long">استراحة طويلة</button>
+                                </div>
+                                <div class="pomodoro-circle" id="pomodoroCircle">
+                                    <svg viewBox="0 0 200 200">
+                                        <circle class="circle-bg" cx="100" cy="100" r="90"></circle>
+                                        <circle class="circle-progress" id="circleProgress" cx="100" cy="100" r="90"></circle>
+                                    </svg>
+                                    <div class="timer-display">
+                                        <span class="timer-minutes" id="timerMinutes">25</span>
+                                        <span class="timer-separator">:</span>
+                                        <span class="timer-seconds" id="timerSeconds">00</span>
+                                    </div>
+                                    <div class="timer-label" id="timerLabel">مذاكرة</div>
+                                </div>
+                                <div class="pomodoro-controls">
+                                    <button class="btn btn-pomo" id="pomoStartBtn"><i class="fas fa-play"></i> بدء</button>
+                                    <button class="btn btn-secondary" id="pomoPauseBtn" style="display:none;"><i class="fas fa-pause"></i> إيقاف مؤقت</button>
+                                    <button class="btn btn-secondary" id="pomoResetBtn"><i class="fas fa-redo"></i> إعادة</button>
+                                    <button class="btn btn-skip" id="pomoSkipBtn"><i class="fas fa-forward"></i> تخطي</button>
+                                </div>
+                                <div class="pomodoro-settings">
+                                    <div class="pomo-setting">
+                                        <label data-i18n="pomodoro_work_min">المذاكرة (دقائق)</label>
+                                        <input type="number" id="pomoWorkMin" value="25" min="1" max="90">
+                                    </div>
+                                    <div class="pomo-setting">
+                                        <label data-i18n="pomodoro_short_min">استراحة قصيرة (دقائق)</label>
+                                        <input type="number" id="pomoShortMin" value="5" min="1" max="30">
+                                    </div>
+                                    <div class="pomo-setting">
+                                        <label data-i18n="pomodoro_long_min">استراحة طويلة (دقائق)</label>
+                                        <input type="number" id="pomoLongMin" value="15" min="1" max="60">
+                                    </div>
+                                    <div class="pomo-setting">
+                                        <label data-i18n="pomodoro_rounds">جولات قبل استراحة طويلة</label>
+                                        <input type="number" id="pomoRounds" value="4" min="2" max="8">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pomodoro-stats-card">
+                                <h3><i class="fas fa-chart-bar"></i> إحصائيات اليوم</h3>
+                                <div class="pomo-stats-grid">
+                                    <div class="pomo-stat">
+                                        <span class="pomo-stat-num" id="pomoSessions">0</span>
+                                        <span class="pomo-stat-label">جولات مكتملة</span>
+                                    </div>
+                                    <div class="pomo-stat">
+                                        <span class="pomo-stat-num" id="pomoTotalMin">0</span>
+                                        <span class="pomo-stat-label">دقيقة مذاكرة</span>
+                                    </div>
+                                    <div class="pomo-stat">
+                                        <span class="pomo-stat-num" id="pomoStreak">0</span>
+                                        <span class="pomo-stat-label">أطول سلسلة</span>
+                                    </div>
+                                </div>
+                                <div class="pomo-history" id="pomoHistory">
+                                    <h4>سجل الجولات</h4>
+                                    <div class="pomo-history-list" id="pomoHistoryList">
+                                        <div class="empty-state-sm">لا توجد جولات مسجلة بعد</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievements/Gamification Page -->
+                <div class="page" id="page-achievements">
+                    <div class="page-header">
+                        <h2><i class="fas fa-trophy"></i> <span data-i18n="page_achievements">الإنجازات والنقاط</span></h2>
+                    </div>
+                    <div class="achievements-container">
+                        <div class="level-card">
+                            <div class="level-badge" id="levelBadge">
+                                <i class="fas fa-star"></i>
+                                <span id="levelNumber">1</span>
+                            </div>
+                            <div class="level-info">
+                                <h3 id="levelTitle">مبتدئ</h3>
+                                <div class="xp-bar">
+                                    <div class="xp-fill" id="xpFill" style="width: 0%"></div>
+                                </div>
+                                <p class="xp-text"><span id="currentXP">0</span> / <span id="nextLevelXP">100</span> نقطة خبرة</p>
+                            </div>
+                            <div class="points-display">
+                                <span class="points-num" id="totalPoints">0</span>
+                                <span class="points-label">نقطة</span>
+                            </div>
+                        </div>
+                        <div class="badges-section">
+                            <h3><i class="fas fa-medal"></i> الشارات</h3>
+                            <div class="badges-grid" id="badgesGrid">
+                                <div class="badge-item locked" data-badge="first_homework">
+                                    <div class="badge-icon"><i class="fas fa-check"></i></div>
+                                    <span>أول واجب</span>
+                                </div>
+                                <div class="badge-item locked" data-badge="five_homework">
+                                    <div class="badge-icon"><i class="fas fa-tasks"></i></div>
+                                    <span>5 واجبات</span>
+                                </div>
+                                <div class="badge-item locked" data-badge="ten_homework">
+                                    <div class="badge-icon"><i class="fas fa-book"></i></div>
+                                    <span>10 واجبات</span>
+                                </div>
+                                <div class="badge-item locked" data-badge="first_exam">
+                                    <div class="badge-icon"><i class="fas fa-pen"></i></div>
+                                    <span>أول امتحان</span>
+                                </div>
+                                <div class="badge-item locked" data-badge="pomodoro_5">
+                                    <div class="badge-icon"><i class="fas fa-clock"></i></div>
+                                    <span>5 جولات بومودورو</span>
+                                </div>
+                                <div class="badge-item locked" data-badge="pomodoro_20">
+                                    <div class="badge-icon"><i class="fas fa-fire"></i></div>
+                                    <span>20 جولة بومودورو</span>
+                                </div>
+                                <div class="badge-item locked" data-badge="streak_3">
+                                    <div class="badge-icon"><i class="fas fa-calendar-check"></i></div>
+                                    <span>3 أيام متتالية</span>
+                                </div>
+                                <div class="badge-item locked" data-badge="streak_7">
+                                    <div class="badge-icon"><i class="fas fa-gem"></i></div>
+                                    <span>7 أيام متتالية</span>
+                                </div>
+                                <div class="badge-item locked" data-badge="level_5">
+                                    <div class="badge-icon"><i class="fas fa-crown"></i></div>
+                                    <span>المستوى 5</span>
+                                </div>
+                                <div class="badge-item locked" data-badge="level_10">
+                                    <div class="badge-icon"><i class="fas fa-trophy"></i></div>
+                                    <span>المستوى 10</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="points-log">
+                            <h3><i class="fas fa-history"></i> سجل النقاط</h3>
+                            <div class="points-log-list" id="pointsLogList">
+                                <div class="empty-state-sm">لم تكسب نقاطاً بعد</div>
+                            </div>
+                        </div>
+                        <div class="daily-activity-section">
+                            <h3><i class="fas fa-calendar-check"></i> النشاط اليومي</h3>
+                            <div class="activity-grid" id="achievementsActivityGrid"></div>
+                            <div class="today-checklist" id="achievementsChecklist">
+                                <div class="empty-state-sm">أكمل مهامك اليومية لكسب نقاط إضافية</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parent Dashboard Page -->
+                <div class="page" id="page-parent">
+                    <div class="page-header">
+                        <h2><i class="fas fa-users"></i> <span data-i18n="page_parent">لوحة متابعة الوالدين</span></h2>
+                    </div>
+                    <div class="parent-container">
+                        <div class="parent-code-section">
+                            <div class="parent-code-card">
+                                <h3><i class="fas fa-key"></i> رمز المتابعة</h3>
+                                <p>شارك هذا الرمز مع ولي الأمر لمتابعة تقدمك</p>
+                                <div class="parent-code" id="parentCode">---</div>
+                                <button class="btn btn-primary" id="generateParentCode"><i class="fas fa-sync-alt"></i> إنشاء رمز جديد</button>
+                            </div>
+                        </div>
+                        <div class="parent-stats-grid">
+                            <div class="parent-stat-card">
+                                <div class="parent-stat-icon"><i class="fas fa-check-double"></i></div>
+                                <div class="parent-stat-info">
+                                    <span class="parent-stat-num" id="parentCompletedHW">0</span>
+                                    <span class="parent-stat-label">واجب مكتمل</span>
+                                </div>
+                            </div>
+                            <div class="parent-stat-card">
+                                <div class="parent-stat-icon"><i class="fas fa-hourglass-half"></i></div>
+                                <div class="parent-stat-info">
+                                    <span class="parent-stat-num" id="parentPendingHW">0</span>
+                                    <span class="parent-stat-label">واجب متبقي</span>
+                                </div>
+                            </div>
+                            <div class="parent-stat-card">
+                                <div class="parent-stat-icon"><i class="fas fa-clock"></i></div>
+                                <div class="parent-stat-info">
+                                    <span class="parent-stat-num" id="parentStudyHours">0</span>
+                                    <span class="parent-stat-label">ساعة مذاكرة</span>
+                                </div>
+                            </div>
+                            <div class="parent-stat-card">
+                                <div class="parent-stat-icon"><i class="fas fa-star"></i></div>
+                                <div class="parent-stat-info">
+                                    <span class="parent-stat-num" id="parentPoints">0</span>
+                                    <span class="parent-stat-label">نقطة</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="parent-sections">
+                            <div class="parent-section">
+                                <h3><i class="fas fa-tasks"></i> نسب إنجاز الواجبات</h3>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="hwProgressFill" style="width: 0%"></div>
+                                    </div>
+                                    <span class="progress-text" id="hwProgressText">0%</span>
+                                </div>
+                            </div>
+                            <div class="parent-section">
+                                <h3><i class="fas fa-clock"></i> نشاط المذاكرة (آخر 7 أيام)</h3>
+                                <div class="weekly-chart" id="weeklyChart">
+                                    <div class="chart-bars">
+                                        <div class="chart-bar-wrap" data-day="sat"><div class="chart-bar" style="height:0%"></div><span>س</span></div>
+                                        <div class="chart-bar-wrap" data-day="sun"><div class="chart-bar" style="height:0%"></div><span>ح</span></div>
+                                        <div class="chart-bar-wrap" data-day="mon"><div class="chart-bar" style="height:0%"></div><span>ن</span></div>
+                                        <div class="chart-bar-wrap" data-day="tue"><div class="chart-bar" style="height:0%"></div><span>ث</span></div>
+                                        <div class="chart-bar-wrap" data-day="wed"><div class="chart-bar" style="height:0%"></div><span>ر</span></div>
+                                        <div class="chart-bar-wrap" data-day="thu"><div class="chart-bar" style="height:0%"></div><span>خ</span></div>
+                                        <div class="chart-bar-wrap" data-day="fri"><div class="chart-bar" style="height:0%"></div><span>ج</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="parent-section">
+                                <h3><i class="fas fa-file-alt"></i> الامتحانات القادمة</h3>
+                                <div class="parent-exams-list" id="parentExamsList">
+                                    <div class="empty-state-sm">لا توجد امتحانات قادمة</div>
+                                </div>
+                            </div>
+                            <div class="parent-section">
+                                <h3><i class="fas fa-calendar-day"></i> جدول اليوم</h3>
+                                <div class="parent-schedule" id="parentSchedule">
+                                    <div class="empty-state-sm">لم يتم إنشاء جدول بعد</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -330,11 +590,11 @@
                 <!-- Settings Page -->
                 <div class="page" id="page-settings">
                     <div class="page-header">
-                        <h2><i class="fas fa-cog"></i> الإعدادات</h2>
+                        <h2><i class="fas fa-cog"></i> <span data-i18n="page_settings">الإعدادات</span></h2>
                     </div>
                     <div class="settings-container">
                         <div class="settings-section">
-                            <h3><i class="fas fa-user"></i> معلومات الحساب</h3>
+                            <h3><i class="fas fa-user"></i> <span data-i18n="settings_account">معلومات الحساب</span></h3>
                             <div class="settings-card">
                                 <div class="setting-item">
                                     <div class="setting-info">
@@ -351,7 +611,52 @@
                             </div>
                         </div>
                         <div class="settings-section">
-                            <h3><i class="fas fa-lock"></i> تغيير كلمة المرور</h3>
+                            <h3><i class="fas fa-bell"></i> <span data-i18n="settings_notifications">إعدادات الإشعارات</span></h3>
+                            <div class="settings-card notification-settings-card">
+                                <div class="notification-toggle-item">
+                                    <div class="notification-toggle-info">
+                                        <i class="fas fa-book"></i>
+                                        <span>إشعارات الواجبات</span>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="notifHomework" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="notification-toggle-item">
+                                    <div class="notification-toggle-info">
+                                        <i class="fas fa-file-alt"></i>
+                                        <span>إشعارات الامتحانات</span>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="notifExams" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="notification-toggle-item">
+                                    <div class="notification-toggle-info">
+                                        <i class="fas fa-clock"></i>
+                                        <span>تذكيرات الجدول</span>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="notifSchedule" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="notification-toggle-item">
+                                    <div class="notification-toggle-info">
+                                        <i class="fas fa-fire"></i>
+                                        <span>تذكير النشاط اليومي</span>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="notifDailyReminder" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="settings-section">
+                            <h3><i class="fas fa-lock"></i> <span data-i18n="settings_password">تغيير كلمة المرور</span></h3>
                             <div class="settings-card">
                                 <form id="changePasswordForm">
                                     <div class="form-group">
@@ -372,9 +677,125 @@
                             </div>
                         </div>
                         <div class="settings-section">
-                            <h3><i class="fas fa-sign-out-alt"></i> الحساب</h3>
+                            <h3><i class="fas fa-database"></i> <span data-i18n="settings_backup">النسخ الاحتياطي والبيانات</span></h3>
+                            <div class="data-management-section">
+                                <div class="data-actions">
+                                    <div class="data-action-card">
+                                        <i class="fas fa-download"></i>
+                                        <h4>تصدير البيانات</h4>
+                                        <p>تحميل نسخة احتياطية من جميع بياناتك</p>
+                                        <button class="btn btn-primary" id="exportDataBtn"><i class="fas fa-file-export"></i> تصدير</button>
+                                    </div>
+                                    <div class="data-action-card">
+                                        <i class="fas fa-upload"></i>
+                                        <h4>استيراد البيانات</h4>
+                                        <p>استعادة البيانات من نسخة احتياطية</p>
+                                        <button class="btn btn-secondary" id="importDataBtn"><i class="fas fa-file-import"></i> استيراد</button>
+                                        <input type="file" id="importFileInput" accept=".json" style="display:none">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="settings-section">
+                            <h3><i class="fas fa-sign-out-alt"></i> <span data-i18n="settings_account_section">الحساب</span></h3>
                             <div class="settings-card">
                                 <button class="btn btn-danger btn-block" id="logoutBtnSettings"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task Tracking Page -->
+                <div class="page" id="page-tasktracking">
+                    <div class="page-header">
+                        <h2><i class="fas fa-tasks"></i> <span data-i18n="page_tasktracking">تتبع المهام الدراسية</span></h2>
+                    </div>
+                    <div class="task-tracking-container">
+                        <div class="tracking-overview">
+                            <div class="tracking-stat-card">
+                                <div class="tracking-stat-icon"><i class="fas fa-clock"></i></div>
+                                <span class="tracking-stat-num" id="taskTotalStudyHours">0</span>
+                                <span class="tracking-stat-label">ساعة مذاكرة هذا الأسبوع</span>
+                            </div>
+                            <div class="tracking-stat-card">
+                                <div class="tracking-stat-icon"><i class="fas fa-check-circle"></i></div>
+                                <span class="tracking-stat-num" id="taskCompletedBlocks">0</span>
+                                <span class="tracking-stat-label">بلوك مكتمل</span>
+                            </div>
+                            <div class="tracking-stat-card">
+                                <div class="tracking-stat-icon"><i class="fas fa-fire"></i></div>
+                                <span class="tracking-stat-num" id="taskStudyStreak">0</span>
+                                <span class="tracking-stat-label">أيام متتالية</span>
+                            </div>
+                            <div class="tracking-stat-card">
+                                <div class="tracking-stat-icon"><i class="fas fa-star"></i></div>
+                                <span class="tracking-stat-num" id="taskEfficiencyScore">0%</span>
+                                <span class="tracking-stat-label">نسبة الإنجاز</span>
+                            </div>
+                        </div>
+
+                        <div class="daily-activity-section">
+                            <h3><i class="fas fa-calendar-check"></i> نشاط هذا الأسبوع</h3>
+                            <div class="activity-grid" id="taskWeeklyActivityGrid"></div>
+                            <h3 style="margin-top:15px"><i class="fas fa-clipboard-check"></i> مهام اليوم</h3>
+                            <div class="today-checklist" id="todayChecklist">
+                                <div class="empty-state-sm">أضف بلوكات وقت لتظهر مهامك هنا</div>
+                            </div>
+                        </div>
+
+                        <div class="add-time-block-section">
+                            <h3><i class="fas fa-plus-circle"></i> إضافة بلوك وقت جديد</h3>
+                            <form id="timeBlockForm" class="time-block-form">
+                                <div class="form-group">
+                                    <label>المهمة</label>
+                                    <input type="text" id="tbTitle" required placeholder="مثال: مراجعة رياضيات" data-i18n-placeholder="tb_title_ph">
+                                </div>
+                                <div class="form-group">
+                                    <label>المادة</label>
+                                    <input type="text" id="tbSubject" required placeholder="مثال: رياضيات" data-i18n-placeholder="tb_subject_ph">
+                                </div>
+                                <div class="form-group">
+                                    <label>وقت البداية</label>
+                                    <input type="time" id="tbStartTime" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>وقت النهاية</label>
+                                    <input type="time" id="tbEndTime" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>الأولوية</label>
+                                    <select id="tbPriority">
+                                        <option value="high">عالية</option>
+                                        <option value="medium" selected>متوسطة</option>
+                                        <option value="low">منخفضة</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>النوع</label>
+                                    <select id="tbType">
+                                        <option value="study">مذاكرة</option>
+                                        <option value="review">مراجعة</option>
+                                        <option value="homework">واجب</option>
+                                        <option value="project">مشروع</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> إضافة</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="time-blocks-section">
+                            <h3><i class="fas fa-stream"></i> بلوكات الوقت</h3>
+                            <div class="time-blocks-grid" id="timeBlocksGrid">
+                                <div class="empty-state-sm">لم تضف بلوكات وقت بعد</div>
+                            </div>
+                        </div>
+
+                        <div class="ai-habit-analysis" id="habitAnalysisSection">
+                            <h3><i class="fas fa-brain"></i> تحليل العادات الذكي</h3>
+                            <div class="habit-insights" id="habitInsights">
+                                <div class="empty-state-sm">أضف بيانات أكثر للحصول على تحليلات ذكية</div>
                             </div>
                         </div>
                     </div>
@@ -383,25 +804,35 @@
         </main>
     </div>
 
+    <!-- Notification Toast -->
+    <div class="notification-toast hidden" id="notificationToast">
+        <div class="toast-icon info"><i class="fas fa-info-circle"></i></div>
+        <div class="toast-content">
+            <div class="toast-title" id="toastTitle">إشعار</div>
+            <div class="toast-message" id="toastMessage">رسالة</div>
+        </div>
+        <button class="toast-close" id="toastClose"><i class="fas fa-times"></i></button>
+    </div>
+
     <!-- Add Homework Modal -->
     <div class="modal" id="homeworkModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fas fa-book"></i> إضافة واجب جديد</h3>
+                <h3><i class="fas fa-book"></i> <span data-i18n="modal_add_homework">إضافة واجب جديد</span></h3>
                 <button class="modal-close" onclick="closeModal('homeworkModal')">&times;</button>
             </div>
             <form id="homeworkForm">
                 <div class="form-group">
                     <label>عنوان الواجب</label>
-                    <input type="text" id="hwTitle" required placeholder="مثال: تمارين رياضيات">
+                    <input type="text" id="hwTitle" required placeholder="مثال: تمارين رياضيات" data-i18n-placeholder="hw_title_ph">
                 </div>
                 <div class="form-group">
                     <label>المادة</label>
-                    <input type="text" id="hwSubject" required placeholder="مثال: رياضيات">
+                    <input type="text" id="hwSubject" required placeholder="مثال: رياضيات" data-i18n-placeholder="hw_subject_ph">
                 </div>
                 <div class="form-group">
                     <label>الوصف</label>
-                    <textarea id="hwDescription" placeholder="أضف تفاصيل الواجب..." rows="3"></textarea>
+                    <textarea id="hwDescription" placeholder="أضف تفاصيل الواجب..." rows="3" data-i18n-placeholder="hw_desc_ph"></textarea>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -441,13 +872,13 @@
     <div class="modal" id="classModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fas fa-book-reader"></i> إضافة مادة للمذاكرة</h3>
+                <h3><i class="fas fa-book-reader"></i> <span data-i18n="modal_add_class">إضافة مادة للمذاكرة</span></h3>
                 <button class="modal-close" onclick="closeModal('classModal')">&times;</button>
             </div>
             <form id="classForm">
                 <div class="form-group">
                     <label>اسم المادة</label>
-                    <input type="text" id="className" required placeholder="مثال: رياضيات، فيزياء، كيمياء...">
+                    <input type="text" id="className" required placeholder="مثال: رياضيات، علوم، تاريخ..." data-i18n-placeholder="class_name_ph">
                 </div>
                 <div class="form-group">
                     <label>مدة المذاكرة (بالدقائق)</label>
@@ -479,7 +910,7 @@
                 </div>
                 <div class="form-group">
                     <label>ملاحظات (اختياري)</label>
-                    <textarea id="classNotes" placeholder="أضف ملاحظات على المادة..." rows="2"></textarea>
+                    <textarea id="classNotes" placeholder="أضف ملاحظات على المادة..." rows="2" data-i18n-placeholder="class_notes_ph"></textarea>
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('classModal')">إلغاء</button>
@@ -493,17 +924,17 @@
     <div class="modal" id="examModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fas fa-file-alt"></i> إضافة امتحان جديد</h3>
+                <h3><i class="fas fa-file-alt"></i> <span data-i18n="modal_add_exam">إضافة امتحان جديد</span></h3>
                 <button class="modal-close" onclick="closeModal('examModal')">&times;</button>
             </div>
             <form id="examForm">
                 <div class="form-group">
                     <label>اسم الامتحان</label>
-                    <input type="text" id="examName" required placeholder="مثال: امتحان نهائي">
+                    <input type="text" id="examName" required placeholder="مثال: امتحان نهائي" data-i18n-placeholder="exam_name_ph">
                 </div>
                 <div class="form-group">
                     <label>المادة</label>
-                    <input type="text" id="examSubject" required placeholder="مثال: فيزياء">
+                    <input type="text" id="examSubject" required placeholder="مثال: علوم" data-i18n-placeholder="exam_subject_ph">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -529,7 +960,7 @@
                 </div>
                 <div class="form-group">
                     <label>ملاحظات</label>
-                    <textarea id="examNotes" placeholder="أضف ملاحظات أو مذاكرة مقترحة..." rows="3"></textarea>
+                    <textarea id="examNotes" placeholder="أضف ملاحظات أو مذاكرة مقترحة..." rows="3" data-i18n-placeholder="exam_notes_ph"></textarea>
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('examModal')">إلغاء</button>
@@ -539,6 +970,19 @@
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js"></script>
+    <script src="firebase-config.js"></script>
     <script src="dashboard.js"></script>
+    <script>
+        // Register Firebase Messaging Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('firebase-messaging-sw.js')
+                .then(function(reg) { console.log('SW registered:', reg.scope); })
+                .catch(function(err) { console.warn('SW registration failed:', err); });
+        }
+    </script>
 </body>
 </html>

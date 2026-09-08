@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta name="referrer" content="no-referrer">
+    <title>العودة للمدرسة - تسجيل الدخول</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        .login-page{min-height:100vh;display:flex;background:var(--bg-dark);overflow:hidden}
+        .login-left{flex:1;background:linear-gradient(135deg,var(--primary) 0%,#3d2a8a 60%,#1a1040 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px;position:relative;overflow:hidden}
+        .login-left::before{content:'';position:absolute;top:-100px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(255,255,255,0.08) 0%,transparent 70%);border-radius:50%}
+        .login-left::after{content:'';position:absolute;bottom:-150px;right:-100px;width:350px;height:350px;background:radial-gradient(circle,rgba(0,206,201,0.12) 0%,transparent 70%);border-radius:50%}
+        .login-brand{text-align:center;position:relative;z-index:1}
+        .login-brand-icon{width:100px;height:100px;background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border-radius:28px;display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto 30px;border:1px solid rgba(255,255,255,0.2)}
+        .login-brand h1{font-size:36px;font-weight:800;margin-bottom:12px}
+        .login-brand p{font-size:17px;opacity:0.85;line-height:1.7}
+        .login-features{margin-top:50px;display:flex;flex-direction:column;gap:16px;position:relative;z-index:1}
+        .login-feature-item{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.1);backdrop-filter:blur(5px);padding:16px 22px;border-radius:14px;border:1px solid rgba(255,255,255,0.08)}
+        .login-feature-item i{font-size:20px;color:var(--success);width:24px;text-align:center}
+        .login-feature-item span{font-size:15px;font-weight:500}
+        .login-right{flex:1;display:flex;align-items:center;justify-content:center;padding:50px;background:var(--bg-dark)}
+        .login-form-wrapper{width:100%;max-width:420px}
+        .login-mobile-brand{display:none;text-align:center;margin-bottom:30px}
+        .login-mobile-brand .mobile-icon{width:60px;height:60px;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px}
+        .login-mobile-brand h2{font-size:22px;font-weight:700}
+        .login-form-header{margin-bottom:35px}
+        .login-form-header h2{font-size:28px;font-weight:800;margin-bottom:8px}
+        .login-form-header p{font-size:15px;color:var(--text-secondary)}
+        .login-form{display:flex;flex-direction:column;gap:20px}
+        .login-input-group{position:relative}
+        .login-input-group label{display:block;margin-bottom:8px;font-size:14px;font-weight:600;color:var(--text-secondary)}
+        .login-input-wrapper{position:relative}
+        .login-input-wrapper i.input-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:16px;transition:var(--transition)}
+        .login-input-wrapper input{width:100%;padding:16px 48px 16px 48px;background:var(--bg-input);border:2px solid var(--border-color);border-radius:14px;color:var(--text-primary);font-family:inherit;font-size:15px;transition:var(--transition)}
+        .login-input-wrapper input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(108,92,231,0.15)}
+        .login-input-wrapper input::placeholder{color:var(--text-muted)}
+        .login-toggle-pw{position:absolute;left:16px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;padding:4px;transition:var(--transition)}
+        .login-toggle-pw:hover{color:var(--primary-light)}
+        .login-options{display:flex;align-items:center;justify-content:space-between}
+        .login-remember{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--text-secondary)}
+        .login-remember input[type="checkbox"]{width:16px;height:16px;accent-color:var(--primary);cursor:pointer}
+        .login-forgot{font-size:13px;color:var(--primary-light);font-weight:500}
+        .login-forgot:hover{text-decoration:underline}
+        .login-error{color:var(--danger);font-size:14px;min-height:20px;text-align:center}
+        .login-submit{width:100%;padding:16px;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);color:white;border:none;border-radius:14px;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:10px}
+        .login-submit:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(108,92,231,0.4)}
+        .login-divider{display:flex;align-items:center;gap:15px;margin:5px 0}
+        .login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border-color)}
+        .login-divider span{font-size:13px;color:var(--text-muted);white-space:nowrap}
+        .login-signup-link{text-align:center;font-size:14px;color:var(--text-secondary)}
+        .login-signup-link a{color:var(--primary-light);font-weight:600}
+        .login-signup-link a:hover{text-decoration:underline}
+        .login-back-home{text-align:center;margin-top:20px}
+        .login-back-home a{font-size:13px;color:var(--text-muted);display:inline-flex;align-items:center;gap:6px}
+        .login-back-home a:hover{color:var(--primary-light)}
+        .lang-toggle-auth{background:var(--bg-input);border:2px solid var(--border-color);color:var(--text-primary);padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:6px;position:absolute;top:20px;left:20px;z-index:10}
+        .lang-toggle-auth:hover{border-color:var(--primary);color:var(--primary-light)}
+        @media(max-width:900px){.login-page{flex-direction:column}.login-left{display:none}.login-mobile-brand{display:block}.login-right{padding:30px 20px}}
+    </style>
+</head>
+<body class="login-page">
+    <button class="lang-toggle-auth" id="langToggle"><i class="fas fa-globe"></i> <span id="langLabel">EN</span></button>
+    <div class="login-left">
+        <div class="login-brand">
+            <div class="login-brand-icon"><i class="fas fa-graduation-cap"></i></div>
+            <h1 data-i18n="app_name">العودة للمدرسة</h1>
+            <p>مساعدك الذكي لتنظيم حياتك المدرسية</p>
+        </div>
+        <div class="login-features">
+            <div class="login-feature-item"><i class="fas fa-check-circle"></i><span data-i18n="feature2_title">إدارة الواجبات</span></div>
+            <div class="login-feature-item"><i class="fas fa-check-circle"></i><span data-i18n="feature5_title">مساعد ذكي</span></div>
+            <div class="login-feature-item"><i class="fas fa-check-circle"></i><span data-i18n="feature1_title">جدول يومي ذكي</span></div>
+            <div class="login-feature-item"><i class="fas fa-check-circle"></i><span data-i18n="feature4_title">مؤقت بومودورو</span></div>
+        </div>
+    </div>
+    <div class="login-right">
+        <div class="login-form-wrapper">
+            <div class="login-mobile-brand">
+                <div class="mobile-icon"><i class="fas fa-graduation-cap"></i></div>
+                <h2 data-i18n="app_name">العودة للمدرسة</h2>
+            </div>
+            <div class="login-form-header">
+                <h2 data-i18n="login_title">مرحباً بعودتك!</h2>
+                <p data-i18n="login_subtitle">سجّل دخولك للمتابعة</p>
+            </div>
+            <form id="loginForm" class="login-form">
+                <div class="login-input-group">
+                    <label for="email" data-i18n="login_email">البريد الإلكتروني</label>
+                    <div class="login-input-wrapper">
+                        <input type="email" id="email" required placeholder="example@email.com" autocomplete="email">
+                        <i class="fas fa-envelope input-icon"></i>
+                    </div>
+                </div>
+                <div class="login-input-group">
+                    <label for="password" data-i18n="login_password">كلمة المرور</label>
+                    <div class="login-input-wrapper">
+                        <input type="password" id="password" required placeholder="••••••••" autocomplete="current-password">
+                        <i class="fas fa-lock input-icon"></i>
+                        <button type="button" class="login-toggle-pw" onclick="togglePassword('password', this)"><i class="fas fa-eye"></i></button>
+                    </div>
+                </div>
+                <div class="login-options">
+                    <label class="login-remember">
+                        <input type="checkbox" id="rememberMe"> <span data-i18n="login_remember">تذكرني</span>
+                    </label>
+                    <a href="#" class="login-forgot" data-i18n="login_forgot">نسيت كلمة المرور؟</a>
+                </div>
+                <div id="errorMessage" class="login-error"></div>
+                <button type="submit" class="login-submit">
+                    <i class="fas fa-sign-in-alt"></i> <span data-i18n="login_submit">تسجيل الدخول</span>
+                </button>
+            </form>
+            <div class="login-divider"><span data-i18n="login_or">أو</span></div>
+            <div class="login-signup-link">
+                <span data-i18n="login_no_account">ليس لديك حساب؟</span> <a href="signup.html" data-i18n="login_create">أنشئ حساباً جديداً</a>
+            </div>
+            <div class="login-back-home">
+                <a href="index.html"><i class="fas fa-arrow-right"></i> <span data-i18n="login_back">العودة للرئيسية</span></a>
+                <a href="parent.html"><i class="fas fa-users"></i> <span data-i18n="parent_login">لوحة الوالدين</span></a>
+            </div>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="i18n.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>

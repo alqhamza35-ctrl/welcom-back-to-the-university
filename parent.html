@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <title>لوحة متابعة الوالدين - العودة للمدرسة</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        .parent-view-page{min-height:100vh;display:flex;flex-direction:column;align-items:center;background:var(--bg-dark);padding:30px 20px}
+        .parent-view-header{text-align:center;margin-bottom:40px;width:100%;max-width:900px}
+        .parent-view-header .brand{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:16px}
+        .parent-view-header .brand-icon{width:56px;height:56px;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;color:white}
+        .parent-view-header h1{font-size:28px;font-weight:800}
+        .parent-view-header p{color:var(--text-secondary);margin-top:8px}
+        .parent-view-header .lang-toggle{position:absolute;top:20px;left:20px;background:var(--bg-input);border:2px solid var(--border-color);color:var(--text-primary);padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:6px}
+        .parent-view-header .lang-toggle:hover{border-color:var(--primary);color:var(--primary-light)}
+        .parent-view-header .back-link{position:absolute;top:20px;right:20px;background:var(--bg-input);border:2px solid var(--border-color);color:var(--text-primary);padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:6px;text-decoration:none}
+        .parent-view-header .back-link:hover{border-color:var(--primary);color:var(--primary-light)}
+        .parent-view-header{position:relative}
+        .code-entry{width:100%;max-width:900px;background:var(--bg-card);border-radius:20px;padding:40px;border:1px solid var(--border-color);text-align:center;margin-bottom:30px}
+        .code-entry h2{font-size:22px;margin-bottom:10px}
+        .code-entry p{color:var(--text-secondary);margin-bottom:24px}
+        .code-input-row{display:flex;gap:12px;justify-content:center;align-items:center;max-width:400px;margin:0 auto}
+        .code-input-row input{flex:1;padding:16px 20px;background:var(--bg-input);border:2px solid var(--border-color);border-radius:14px;color:var(--text-primary);font-family:inherit;font-size:18px;font-weight:700;text-align:center;letter-spacing:2px;transition:var(--transition)}
+        .code-input-row input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(108,92,231,0.15)}
+        .code-input-row input::placeholder{color:var(--text-muted);font-weight:400;font-size:16px;letter-spacing:0}
+        .code-entry .error-msg{color:var(--danger);font-size:14px;margin-top:12px;min-height:20px}
+        .code-entry .btn-connect{padding:16px 32px;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);color:white;border:none;border-radius:14px;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:var(--transition)}
+        .code-entry .btn-connect:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(108,92,231,0.4)}
+        .parent-dashboard{width:100%;max-width:900px;display:none}
+        .parent-student-header{display:flex;align-items:center;gap:16px;background:var(--bg-card);border-radius:16px;padding:20px 24px;border:1px solid var(--border-color);margin-bottom:24px}
+        .parent-student-avatar{width:56px;height:56px;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:white}
+        .parent-student-info h3{font-size:18px;font-weight:700}
+        .parent-student-info p{color:var(--text-secondary);font-size:14px}
+        .parent-stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+        .parent-stat{background:var(--bg-card);border-radius:16px;padding:20px;border:1px solid var(--border-color);text-align:center}
+        .parent-stat .stat-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 12px}
+        .parent-stat .stat-icon.hw{background:rgba(108,92,231,0.15);color:var(--primary-light)}
+        .parent-stat .stat-icon.exam{background:rgba(253,121,168,0.15);color:#fd79a8}
+        .parent-stat .stat-icon.time{background:rgba(0,206,201,0.15);color:var(--success)}
+        .parent-stat .stat-icon.points{background:rgba(253,203,110,0.15);color:#fdcb6e}
+        .parent-stat .stat-num{font-size:28px;font-weight:800;display:block}
+        .parent-stat .stat-label{font-size:13px;color:var(--text-secondary);display:block;margin-top:4px}
+        .parent-sections-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+        .parent-section-card{background:var(--bg-card);border-radius:16px;padding:24px;border:1px solid var(--border-color)}
+        .parent-section-card h3{font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+        .parent-section-card h3 i{color:var(--primary-light)}
+        .progress-container{display:flex;align-items:center;gap:12px}
+        .progress-bar-wrap{flex:1;height:12px;background:var(--bg-input);border-radius:6px;overflow:hidden}
+        .progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--primary-light));border-radius:6px;transition:width 0.5s}
+        .progress-pct{font-size:16px;font-weight:700;min-width:45px;text-align:right}
+        .chart-bars-wrap{display:flex;align-items:flex-end;gap:8px;height:120px;padding-top:10px}
+        .chart-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+        .chart-bar-col .bar{width:100%;background:linear-gradient(180deg,var(--primary) 0%,var(--primary-dark) 100%);border-radius:4px 4px 0 0;min-height:2px;transition:height 0.5s}
+        .chart-bar-col .day-label{font-size:11px;color:var(--text-muted)}
+        .parent-section-card .exam-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-color)}
+        .parent-section-card .exam-item:last-child{border:none}
+        .parent-section-card .exam-name{font-weight:600}
+        .parent-section-card .exam-subject{color:var(--text-secondary);font-size:13px}
+        .parent-section-card .exam-date{color:var(--primary-light);font-size:13px;font-weight:600}
+        .parent-section-card .schedule-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border-color)}
+        .parent-section-card .schedule-item:last-child{border:none}
+        .parent-section-card .sch-time{font-size:13px;color:var(--primary-light);font-weight:600;min-width:70px}
+        .parent-section-card .sch-activity{font-size:14px}
+        .parent-section-card .empty-msg{color:var(--text-muted);font-size:14px;text-align:center;padding:20px 0}
+        .parent-section-card.full-width{grid-column:1 / -1}
+        @media(max-width:700px){
+            .parent-stats-row{grid-template-columns:repeat(2,1fr)}
+            .parent-sections-grid{grid-template-columns:1fr}
+            .code-input-row{flex-direction:column}
+            .parent-view-header .back-link,.parent-view-header .lang-toggle{position:static;margin:5px}
+            .parent-view-header .btn-row{display:flex;justify-content:center;flex-wrap:wrap}
+        }
+    </style>
+</head>
+<body class="parent-view-page">
+    <div class="parent-view-header">
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-right"></i> <span data-i18n="parent_back">العودة للرئيسية</span></a>
+        <button class="lang-toggle" id="langToggle"><i class="fas fa-globe"></i> <span id="langLabel">EN</span></button>
+        <div class="brand">
+            <div class="brand-icon"><i class="fas fa-graduation-cap"></i></div>
+            <h1 data-i18n="app_name">العودة للمدرسة</h1>
+        </div>
+        <p data-i18n="parent_view_subtitle">لوحة متابعة الوالدين - تتبع تقدم طفلك الدراسي</p>
+    </div>
+
+    <div class="code-entry" id="codeEntry">
+        <h2><i class="fas fa-key"></i> <span data-i18n="parent_enter_code">أدخل رمز المتابعة</span></h2>
+        <p data-i18n="parent_enter_code_desc">أدخل الرمز الذي حصلت عليه من طفلك لمتابعة تقدمه</p>
+        <div class="code-input-row">
+            <input type="text" id="trackingCodeInput" placeholder="BTS-XXXXXX" maxlength="10" autocomplete="off">
+            <button class="btn-connect" id="connectBtn"><i class="fas fa-search"></i> <span data-i18n="parent_connect">تتبع</span></button>
+        </div>
+        <div class="error-msg" id="codeError"></div>
+    </div>
+
+    <div class="parent-dashboard" id="parentDashboard">
+        <div class="parent-student-header">
+            <div class="parent-student-avatar" id="studentAvatar">م</div>
+            <div class="parent-student-info">
+                <h3 id="studentName">-</h3>
+                <p id="studentEmail">-</p>
+            </div>
+        </div>
+
+        <div class="parent-stats-row">
+            <div class="parent-stat">
+                <div class="stat-icon hw"><i class="fas fa-check-double"></i></div>
+                <span class="stat-num" id="pvCompletedHW">0</span>
+                <span class="stat-label" data-i18n="pv_hw_completed">واجب مكتمل</span>
+            </div>
+            <div class="parent-stat">
+                <div class="stat-icon exam"><i class="fas fa-hourglass-half"></i></div>
+                <span class="stat-num" id="pvPendingHW">0</span>
+                <span class="stat-label" data-i18n="pv_hw_pending">واجب متبقي</span>
+            </div>
+            <div class="parent-stat">
+                <div class="stat-icon time"><i class="fas fa-clock"></i></div>
+                <span class="stat-num" id="pvStudyHours">0</span>
+                <span class="stat-label" data-i18n="pv_study_hours">ساعة مذاكرة</span>
+            </div>
+            <div class="parent-stat">
+                <div class="stat-icon points"><i class="fas fa-star"></i></div>
+                <span class="stat-num" id="pvPoints">0</span>
+                <span class="stat-label" data-i18n="pv_points">نقطة</span>
+            </div>
+        </div>
+
+        <div class="parent-sections-grid">
+            <div class="parent-section-card">
+                <h3><i class="fas fa-tasks"></i> <span data-i18n="pv_hw_progress">نسب إنجاز الواجبات</span></h3>
+                <div class="progress-container">
+                    <div class="progress-bar-wrap">
+                        <div class="progress-bar-fill" id="pvProgressFill" style="width: 0%"></div>
+                    </div>
+                    <span class="progress-pct" id="pvProgressPct">0%</span>
+                </div>
+            </div>
+            <div class="parent-section-card">
+                <h3><i class="fas fa-star"></i> <span data-i18n="pv_level">المستوى والإنجازات</span></h3>
+                <div style="text-align:center;padding:10px 0">
+                    <div style="font-size:32px;font-weight:800;color:var(--primary-light)" id="pvLevel">1</div>
+                    <div style="font-size:14px;color:var(--text-secondary);margin-top:4px" id="pvLevelTitle">مبتدئ</div>
+                    <div style="margin-top:8px;font-size:13px;color:var(--text-muted)"><span id="pvXP">0</span> / <span id="pvNextXP">100</span> نقطة خبرة</div>
+                </div>
+            </div>
+            <div class="parent-section-card">
+                <h3><i class="fas fa-file-alt"></i> <span data-i18n="pv_upcoming_exams">الامتحانات القادمة</span></h3>
+                <div id="pvExamsList">
+                    <div class="empty-msg" data-i18n="pv_no_exams">لا توجد امتحانات قادمة</div>
+                </div>
+            </div>
+            <div class="parent-section-card">
+                <h3><i class="fas fa-calendar-day"></i> <span data-i18n="pv_daily_schedule">جدول اليوم</span></h3>
+                <div id="pvScheduleList">
+                    <div class="empty-msg" data-i18n="pv_no_schedule">لم يتم إنشاء جدول بعد</div>
+                </div>
+            </div>
+            <div class="parent-section-card full-width">
+                <h3><i class="fas fa-clock"></i> <span data-i18n="pv_study_activity">نشاط المذاكرة (آخر 7 أيام)</span></h3>
+                <div class="chart-bars-wrap" id="pvWeeklyChart"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        'use strict';
+
+        var parentTranslations = {
+            ar: {
+                app_name: 'العودة للمدرسة',
+                parent_back: 'العودة للرئيسية',
+                parent_view_subtitle: 'لوحة متابعة الوالدين - تتبع تقدم طفلك الدراسي',
+                parent_enter_code: 'أدخل رمز المتابعة',
+                parent_enter_code_desc: 'أدخل الرمز الذي حصلت عليه من طفلك لمتابعة تقدمه',
+                parent_connect: 'تتبع',
+                pv_hw_completed: 'واجب مكتمل',
+                pv_hw_pending: 'واجب متبقي',
+                pv_study_hours: 'ساعة مذاكرة',
+                pv_points: 'نقطة',
+                pv_hw_progress: 'نسب إنجاز الواجبات',
+                pv_level: 'المستوى والإنجازات',
+                pv_upcoming_exams: 'الامتحانات القادمة',
+                pv_no_exams: 'لا توجد امتحانات قادمة',
+                pv_daily_schedule: 'جدول اليوم',
+                pv_no_schedule: 'لم يتم إنشاء جدول بعد',
+                pv_study_activity: 'نشاط المذاكرة (آخر 7 أيام)',
+                pv_error_code: 'رمز غير صحيح. تأكد من الرمز وأعد المحاولة.',
+                pv_level_titles: ['مبتدئ','متوسط','متمرس','خبير','سيد','أسطوري'],
+                pv_minutes: 'دقيقة',
+                pv_no_hw: 'لا توجد واجبات',
+                pv_hw_due: 'واجب مستحق',
+                pv_upcoming: 'قادم'
+            },
+            en: {
+                app_name: 'Back to School',
+                parent_back: 'Back to Home',
+                parent_view_subtitle: 'Parent Dashboard - Track your child\'s academic progress',
+                parent_enter_code: 'Enter Tracking Code',
+                parent_enter_code_desc: 'Enter the code you received from your child to track their progress',
+                parent_connect: 'Track',
+                pv_hw_completed: 'Homework Done',
+                pv_hw_pending: 'Homework Pending',
+                pv_study_hours: 'Study Hours',
+                pv_points: 'Points',
+                pv_hw_progress: 'Homework Completion',
+                pv_level: 'Level & Achievements',
+                pv_upcoming_exams: 'Upcoming Exams',
+                pv_no_exams: 'No upcoming exams',
+                pv_daily_schedule: 'Today\'s Schedule',
+                pv_no_schedule: 'No schedule created yet',
+                pv_study_activity: 'Study Activity (Last 7 Days)',
+                pv_error_code: 'Invalid code. Please check and try again.',
+                pv_level_titles: ['Beginner','Intermediate','Advanced','Expert','Master','Legendary'],
+                pv_minutes: 'minutes',
+                pv_no_hw: 'No homework',
+                pv_hw_due: 'Homework Due',
+                pv_upcoming: 'Upcoming'
+            }
+        };
+
+        var currentLang = localStorage.getItem('bts_lang') || 'ar';
+
+        function switchLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('bts_lang', lang);
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            var lbl = document.getElementById('langLabel');
+            if (lbl) lbl.textContent = lang === 'ar' ? 'EN' : 'عربي';
+            var t = parentTranslations[lang];
+            if (!t) return;
+            document.querySelectorAll('[data-i18n]').forEach(function(el) {
+                var key = el.getAttribute('data-i18n');
+                if (t[key]) el.textContent = t[key];
+            });
+        }
+
+        function initLang() {
+            switchLang(currentLang);
+            var btn = document.getElementById('langToggle');
+            if (btn) btn.addEventListener('click', function() { switchLang(currentLang === 'ar' ? 'en' : 'ar'); });
+        }
+
+        function formatTime12(timeStr) {
+            if (!timeStr) return '';
+            var parts = timeStr.split(':');
+            var hours = parseInt(parts[0]);
+            var minutes = parts[1];
+            var period = hours >= 12 ? 'م' : 'ص';
+            var h12 = hours % 12 || 12;
+            return h12 + ':' + minutes + ' ' + period;
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            var date = new Date(dateStr);
+            return date.toLocaleDateString(currentLang === 'ar' ? 'ar-EG' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        function escapeHtml(str) {
+            if (typeof str !== 'string') return '';
+            var div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+
+        function findUserByCode(code) {
+            var users = JSON.parse(localStorage.getItem('bts_users') || '[]');
+            for (var i = 0; i < users.length; i++) {
+                if (users[i].parentCode === code) return users[i];
+            }
+            return null;
+        }
+
+        function loadStudentData(user) {
+            var userId = user.id;
+            var hw = JSON.parse(localStorage.getItem('bts_homework_' + userId) || '[]');
+            var ex = JSON.parse(localStorage.getItem('bts_exams_' + userId) || '[]');
+            var cls = JSON.parse(localStorage.getItem('bts_classes_' + userId) || '[]');
+            var sched = JSON.parse(localStorage.getItem('bts_schedule_' + userId) || '[]');
+            var gam = JSON.parse(localStorage.getItem('bts_gamification_' + userId) || 'null') || {points:0,xp:0,level:1,totalCompletedHW:0,totalPomodoroSessions:0,streak:0,badges:[]};
+            var pomo = JSON.parse(localStorage.getItem('bts_pomodoro_' + userId) || 'null') || {todayStats:{totalMinutes:0}};
+
+            var initial = user.displayName ? user.displayName.charAt(0) : 'م';
+            document.getElementById('studentAvatar').textContent = initial;
+            document.getElementById('studentName').textContent = user.displayName || '-';
+            document.getElementById('studentEmail').textContent = user.email || '-';
+
+            var completed = hw.filter(function(h){return h.completed;}).length;
+            var pending = hw.filter(function(h){return !h.completed;}).length;
+            var studyHours = (pomo.todayStats.totalMinutes / 60).toFixed(1);
+
+            document.getElementById('pvCompletedHW').textContent = completed;
+            document.getElementById('pvPendingHW').textContent = pending;
+            document.getElementById('pvStudyHours').textContent = studyHours;
+            document.getElementById('pvPoints').textContent = gam.points;
+
+            var total = hw.length;
+            var pct = total === 0 ? 0 : Math.round((completed / total) * 100);
+            document.getElementById('pvProgressFill').style.width = pct + '%';
+            document.getElementById('pvProgressPct').textContent = pct + '%';
+
+            var levelTitles = parentTranslations[currentLang].pv_level_titles;
+            var titleIndex = Math.min(Math.floor(gam.level / 3), levelTitles.length - 1);
+            document.getElementById('pvLevel').textContent = gam.level;
+            document.getElementById('pvLevelTitle').textContent = levelTitles[titleIndex];
+            document.getElementById('pvXP').textContent = gam.xp;
+            document.getElementById('pvNextXP').textContent = gam.level * 100;
+
+            var today = new Date();
+            today.setHours(0,0,0,0);
+            var upcoming = ex.filter(function(e){return new Date(e.date) >= today;}).sort(function(a,b){return new Date(a.date)-new Date(b.date);}).slice(0,5);
+            var examsEl = document.getElementById('pvExamsList');
+            if (upcoming.length === 0) {
+                examsEl.innerHTML = '<div class="empty-msg">' + parentTranslations[currentLang].pv_no_exams + '</div>';
+            } else {
+                examsEl.innerHTML = upcoming.map(function(e){
+                    return '<div class="exam-item"><div><div class="exam-name">' + escapeHtml(e.name) + '</div><div class="exam-subject">' + escapeHtml(e.subject) + '</div></div><div class="exam-date">' + formatDate(e.date) + '</div></div>';
+                }).join('');
+            }
+
+            var schedEl = document.getElementById('pvScheduleList');
+            if (sched.length === 0) {
+                schedEl.innerHTML = '<div class="empty-msg">' + parentTranslations[currentLang].pv_no_schedule + '</div>';
+            } else {
+                schedEl.innerHTML = sched.slice(0,8).map(function(item){
+                    return '<div class="schedule-item"><span class="sch-time">' + formatTime12(item.time) + '</span><span class="sch-activity">' + escapeHtml(item.activity) + '</span></div>';
+                }).join('');
+            }
+
+            var dayLabels = currentLang === 'ar' ? ['سب','أح','إث','ثل','أر','خم','جم'] : ['Sat','Sun','Mon','Tue','Wed','Thu','Fri'];
+            var chartHtml = '';
+            for (var i = 6; i >= 0; i--) {
+                var d = new Date(today);
+                d.setDate(d.getDate() - i);
+                var dateStr = d.toISOString().split('T')[0];
+                var dayCls = cls.filter(function(c){return c.date === dateStr;});
+                var totalMin = dayCls.reduce(function(s,c){return s+(c.duration||0);},0);
+                var height = Math.min(100, (totalMin / 300) * 100);
+                var dayIdx = d.getDay();
+                chartHtml += '<div class="chart-bar-col"><div class="bar" style="height:' + height + '%"></div><span class="day-label">' + dayLabels[dayIdx] + '</span></div>';
+            }
+            document.getElementById('pvWeeklyChart').innerHTML = chartHtml;
+
+            document.getElementById('codeEntry').style.display = 'none';
+            document.getElementById('parentDashboard').style.display = 'block';
+        }
+
+        function handleConnect() {
+            var input = document.getElementById('trackingCodeInput');
+            var errorEl = document.getElementById('codeError');
+            var code = input.value.trim().toUpperCase();
+            if (!code) {
+                errorEl.textContent = parentTranslations[currentLang].pv_error_code;
+                return;
+            }
+            var user = findUserByCode(code);
+            if (!user) {
+                errorEl.textContent = parentTranslations[currentLang].pv_error_code;
+                return;
+            }
+            errorEl.textContent = '';
+            loadStudentData(user);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initLang();
+            document.getElementById('connectBtn').addEventListener('click', handleConnect);
+            document.getElementById('trackingCodeInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') handleConnect();
+            });
+            document.getElementById('trackingCodeInput').focus();
+        });
+    })();
+    </script>
+</body>
+</html>
